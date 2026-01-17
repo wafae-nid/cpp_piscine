@@ -6,50 +6,41 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 12:22:02 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/17 16:02:10 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/17 17:17:15 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#include "phonebook.hpp"
 
-class contact
+void Contact::set_first_name(const std::string &value)
 {
-    private :
-        std::string first_name;
-        std::string last_name;
-        std::string phone_number;
-        std::string darkest_sec;
-    public :
-        void set_first_name(std::string value)
-        {
-            first_name = value;
-        }
-        void get_first_name()
-        {
-            return(first_name);
-        }
-        void set_last_name(std::string value)
-        {
-            last_name = value;
-        }
-        void get_last_name()
-        {
-            return(last_name);
-        }
-        void set_phone_nbr(std::string value)
-        {
-            phone_number = value;
-        }
-        void get_phone_nbr()
-        {
-            return(phone_number);
-        }
-        void set_dark_sec(std::string value)
-        {
-            darkest_sec = value;
-        }
-        void get_dark_sec()
-        {
-            return(darkest_sec);
-        }
-};
+    first_name = value;
+}
+const std::string& Contact::get_first_name() const
+{
+    return(first_name);
+}
+void Contact::set_last_name(const std::string &value)
+{
+    last_name = value;
+}
+const std::string& Contact::get_last_name() const
+{
+    return(last_name);
+}
+void Contact::set_phone_nbr(const std::string &value)
+{
+    phone_number = value;
+}
+const std::string& Contact::get_phone_nbr() const
+{
+    return(phone_number);
+}
+void Contact::set_dark_sec(const std::string &value)
+{
+    darkest_sec = value;
+}
+const std::string& Contact::get_dark_sec() const
+{
+    return(darkest_sec);
+}
