@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 10:10:36 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/17 10:30:37 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/17 10:43:30 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,3 +41,7 @@ int main(int argc , char **argv)
        std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *";
     std::cout << '\n';
 }
+
+
+
+
