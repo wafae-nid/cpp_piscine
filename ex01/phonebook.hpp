@@ -19,6 +19,7 @@ class PhoneBook
     private :
         Contact book[8];
         static int     count;
+        static int     flag;
         void    add();
         void    static_display();
         void    line_display();

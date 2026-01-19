@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 12:22:02 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/19 14:13:23 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/19 16:06:12 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,14 @@ const std::array<std::string, 5>& Contact::get_contact() const
     return(contact);
 }
 int PhoneBook::count = 0;
+int PhoneBook::flag = 0;
 
 void PhoneBook::add()
 {
    Contact contact;
    
    contact.set_contact();
+   flag = 1;
    if(count == 8)
     count = 0;
    book[count] = contact;
@@ -169,10 +171,14 @@ PhoneBook::PhoneBook()
         if(input.compare("ADD") == 0)
             add();
         else if(input.compare("SEARCH") == 0)
-           search();
+        {
+            if(flag)
+                search();
+            else
+                std::cout<<"PhoneBook is empty please ADD a contact \n";
+        }
         else if(input.compare("EXIT") == 0)
             exiting();
-        
     }
 }
 
