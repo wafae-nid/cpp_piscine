@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 12:22:02 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/18 19:38:21 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:13:23 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,17 @@
 
 void Contact::set_contact()
 {
-    for (int i = 0; i < 4; i++) {
+   std::array<std::string, 5> fields = {
+        "First name",
+        "Last name",
+        "Nickname",
+        "Phone number",
+        "darkest secret"
+    };
+ 
+    for (int i = 0; i < 5; i++) {
+        
+        std::cout<<fields[i] <<" : ";
         if(!std::getline(std::cin, contact[i]))
         {
             std::cout<< "you successfully exited the program \n";
@@ -25,12 +35,13 @@ void Contact::set_contact()
             while(contact[i].empty())
             {
                 std::cout<< "you can not enter an empty field try again !\n";
+                std::cout<<fields[i] <<" : ";
                 std::getline(std::cin, contact[i]);   
             }
         }
     }
 }
-const std::array<std::string, 4>& Contact::get_contact() const
+const std::array<std::string, 5>& Contact::get_contact() const
 {
     return(contact);
 }
@@ -41,12 +52,9 @@ void PhoneBook::add()
    Contact contact;
    
    contact.set_contact();
-   if(count == 3)
+   if(count == 8)
     count = 0;
    book[count] = contact;
-//    std::cout<< count;
-//    std::cout<<'\n';
-//    std::cout<< book[count].get_contact()[0];
    count++; 
 }
 void PhoneBook::exiting()
@@ -95,16 +103,64 @@ void PhoneBook::dynamic_display()
     }
     line_display();
 }
+void PhoneBook::entery_display(int index)
+{
+    std::string str;
+    std::array<std::string, 5> fields = {
+        "First name",
+        "Last name",
+        "Nickname",
+        "Phone number",
+        "darkest secret"
+    };
+    for (int i = 0; i < 5; i++) 
+    {
+        std::cout<< fields[i] << " : ";
+        str = book[index].get_contact()[i];
+        std::cout<< str ;
+        std::cout<<'\n';
+    }
+    
+}
+void PhoneBook::fetching()
+{
+    std::string input;
+    
+    std::cout<< "choose an index \n";
+    if(!std::getline(std::cin, input))
+    {
+        std::cout<< "you successfully exited the program \n";
+        exit(0);
+    }
+    while(input.length() != 1 || ( std::stoi(input) < 0 || std::stoi(input) >= count))
+    {
+        std::cout<< "try again no entery has this index\n";
+        if(!std::getline(std::cin, input))
+        {
+            std::cout<< "you successfully exited the program \n";
+            exit(0);
+        }
+    }
+    
+    line_display();
+    std::cout<< '\n';
+    entery_display(std::stoi(input));
+    std::cout<< '\n';
+    line_display();
+}
 void PhoneBook::search()
 {
+    
     static_display();
     dynamic_display();
+    fetching(); 
 }
 PhoneBook::PhoneBook()
 {
     std::string input;
     while(1)
     {
+        std::cout<< "enter one of the following commands : \n" << "1 - ADD \n" << "2 - SEARCH \n" << "3 - EXIT \n";
         if(!std::getline(std::cin, input))
         {
             std::cout<<"you successfully exited the PhoneBook\n";
@@ -113,7 +169,6 @@ PhoneBook::PhoneBook()
         if(input.compare("ADD") == 0)
             add();
         else if(input.compare("SEARCH") == 0)
-            // std::cout<<"search\n";
            search();
         else if(input.compare("EXIT") == 0)
             exiting();
@@ -123,7 +178,6 @@ PhoneBook::PhoneBook()
 
 int main ()
 {
-   
     PhoneBook phonebook;
     return(0);   
 }

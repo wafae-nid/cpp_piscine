@@ -9,10 +9,10 @@
 class Contact
 {
     private :
-        std::array<std::string, 4> contact;
+        std::array<std::string, 5> contact;
     public :
         void set_contact();
-        const std::array<std::string, 4>& get_contact() const;
+        const std::array<std::string, 5>& get_contact() const;
 };
 class PhoneBook
 {
@@ -23,6 +23,8 @@ class PhoneBook
         void    static_display();
         void    line_display();
         void    dynamic_display();
+        void    entery_display(int index);
+        void    fetching();
         void    search();
         void    exiting();
     public:
