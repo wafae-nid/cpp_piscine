@@ -3,17 +3,18 @@
 
 #include <string>
 #include <iostream>
-#include <array>
 #include <iomanip>
-#include <cstdlib> 
+#include <cstdlib>
+#include <cctype>
 
 class Contact
 {
     private :
-        std::array<std::string, 5> contact;
+        std::string contact[5];
+        int     inprintable(std::string str);
     public :
         void set_contact();
-        const std::array<std::string, 5>& get_contact() const;
+        const std::string* get_contact() const;
 };
 class PhoneBook
 {

@@ -6,20 +6,36 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 12:22:02 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/22 09:38:54 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/22 16:26:57 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "phonebook.hpp"
 
+int Contact::inprintable(std::string str)
+{
+
+    int i;
+
+    i = 0;
+    while(str[i])
+    {
+        if(!std::isprint(str[i])){
+            std::cout << "is <back_slash> shi7aja!!" << std::endl;
+            return(1);
+        }
+        i++;
+    }
+    return(0); 
+}
 void Contact::set_contact()
 {
-  const std::array<std::string, 5> fields = {
-        "First name",
-        "Last name",
-        "Nickname",
-        "Phone number",
-        "darkest secret"
+  const char *fields[5] = {
+    "First name",
+    "Last name",
+    "Nickname",
+    "Phone number",
+    "darkest secret"
     };
  
     for (int i = 0; i < 5; i++) {
@@ -30,9 +46,9 @@ void Contact::set_contact()
             std::cout<< "you successfully exited the program \n";
             exit(0);
         }
-        if(contact[i].empty())
+        if(contact[i].empty() || inprintable(contact[i]))
         {
-            while(contact[i].empty())
+            while(contact[i].empty() || inprintable(contact[i]))
             {
                 std::cout<< "you can not enter an empty field try again !\n";
                 std::cout<<fields[i] <<" : ";
@@ -41,7 +57,7 @@ void Contact::set_contact()
         }
     }
 }
-const std::array<std::string, 5>& Contact::get_contact() const
+const std::string *Contact::get_contact() const
 {
     return(contact);
 }
@@ -51,7 +67,6 @@ int PhoneBook::flag = 0;
 void PhoneBook::add()
 {
    Contact contact;
-   
    contact.set_contact();
    flag = 1;
    if(count == 8)
@@ -73,7 +88,7 @@ void PhoneBook::line_display()
         {
             std::cout<< '-';
         }
-        std::cout<<'+';
+        std::cout<<'+'; 
         // std::cout<< std::string(10,'-')<< '+';// use an other function to display ue line ;
     }
     std::cout<< '\n';
@@ -113,12 +128,19 @@ void PhoneBook::dynamic_display()
 void PhoneBook::entery_display(int index)
 {
     std::string str;
-    const std::array<std::string, 5> fields = {
-        "First name",
-        "Last name",
-        "Nickname",
-        "Phone number",
-        "darkest secret"
+    // const std::array<std::string, 5> fields = {
+    //     "First name",
+    //     "Last name",
+    //     "Nickname",
+    //     "Phone number",
+    //     "darkest secret"
+    // };
+    const char *fields[5] = {
+    "First name",
+    "Last name",
+    "Nickname",
+    "Phone number",
+    "darkest secret"
     };
     for (int i = 0; i < 5; i++) 
     {
@@ -139,7 +161,7 @@ void PhoneBook::fetching()
         std::cout<< "you successfully exited the program \n";
         exit(0);
     }
-    while(input.length() != 1 || ( std::stoi(input) < 0 || std::stoi(input) >= count))
+    while(input.length() != 1 || ( std::atoi(input.c_str()) < 0 || std::atoi(input.c_str()) >= count))
     {
         std::cout<< "try again no entery has this index\n";
         if(!std::getline(std::cin, input))
@@ -151,7 +173,7 @@ void PhoneBook::fetching()
     
     line_display();
     std::cout<< '\n';
-    entery_display(std::stoi(input));
+    entery_display(std::atoi(input.c_str()));
     std::cout<< '\n';
     line_display();
 }
