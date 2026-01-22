@@ -5,6 +5,7 @@
 #include <iostream>
 #include <array>
 #include <iomanip>
+#include <cstdlib> 
 
 class Contact
 {
@@ -29,6 +30,6 @@ class PhoneBook
         void    search();
         void    exiting();
     public:
-       PhoneBook();  
+       void run();  
 };
 #endif

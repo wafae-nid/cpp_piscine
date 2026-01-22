@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 12:22:02 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/19 16:06:12 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/22 09:38:54 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void Contact::set_contact()
 {
-   std::array<std::string, 5> fields = {
+  const std::array<std::string, 5> fields = {
         "First name",
         "Last name",
         "Nickname",
@@ -69,7 +69,12 @@ void PhoneBook::line_display()
     std::cout<< '+';
     for(int i = 0; i < 4; i++)
     {
-        std::cout<< std::string(10,'-')<< '+';
+        for(int j = 0; j< 10; j++)
+        {
+            std::cout<< '-';
+        }
+        std::cout<<'+';
+        // std::cout<< std::string(10,'-')<< '+';// use an other function to display ue line ;
     }
     std::cout<< '\n';
     
@@ -108,7 +113,7 @@ void PhoneBook::dynamic_display()
 void PhoneBook::entery_display(int index)
 {
     std::string str;
-    std::array<std::string, 5> fields = {
+    const std::array<std::string, 5> fields = {
         "First name",
         "Last name",
         "Nickname",
@@ -157,7 +162,7 @@ void PhoneBook::search()
     dynamic_display();
     fetching(); 
 }
-PhoneBook::PhoneBook()
+void PhoneBook::run()
 {
     std::string input;
     while(1)
@@ -184,6 +189,7 @@ PhoneBook::PhoneBook()
 
 int main ()
 {
-    PhoneBook phonebook;
+    PhoneBook phonebook; // change the constructor so the object can be fully created and just add a run function
+    phonebook.run();
     return(0);   
 }
