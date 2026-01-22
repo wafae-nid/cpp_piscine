@@ -1,68 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phonebook.cpp                                      :+:      :+:    :+:   */
+/*   PhoneBook.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 12:22:02 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/22 16:26:57 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:33:32 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "phonebook.hpp"
+#include "PhoneBook.hpp"
 
-int Contact::inprintable(std::string str)
-{
-
-    int i;
-
-    i = 0;
-    while(str[i])
-    {
-        if(!std::isprint(str[i])){
-            std::cout << "is <back_slash> shi7aja!!" << std::endl;
-            return(1);
-        }
-        i++;
-    }
-    return(0); 
+PhoneBook::PhoneBook() {
+    count = 0;
+    flag = 0;
 }
-void Contact::set_contact()
-{
-  const char *fields[5] = {
-    "First name",
-    "Last name",
-    "Nickname",
-    "Phone number",
-    "darkest secret"
-    };
- 
-    for (int i = 0; i < 5; i++) {
-        
-        std::cout<<fields[i] <<" : ";
-        if(!std::getline(std::cin, contact[i]))
-        {
-            std::cout<< "you successfully exited the program \n";
-            exit(0);
-        }
-        if(contact[i].empty() || inprintable(contact[i]))
-        {
-            while(contact[i].empty() || inprintable(contact[i]))
-            {
-                std::cout<< "you can not enter an empty field try again !\n";
-                std::cout<<fields[i] <<" : ";
-                std::getline(std::cin, contact[i]);   
-            }
-        }
-    }
-}
-const std::string *Contact::get_contact() const
-{
-    return(contact);
-}
-int PhoneBook::count = 0;
-int PhoneBook::flag = 0;
 
 void PhoneBook::add()
 {
@@ -128,13 +81,7 @@ void PhoneBook::dynamic_display()
 void PhoneBook::entery_display(int index)
 {
     std::string str;
-    // const std::array<std::string, 5> fields = {
-    //     "First name",
-    //     "Last name",
-    //     "Nickname",
-    //     "Phone number",
-    //     "darkest secret"
-    // };
+
     const char *fields[5] = {
     "First name",
     "Last name",
@@ -209,9 +156,3 @@ void PhoneBook::run()
     }
 }
 
-int main ()
-{
-    PhoneBook phonebook; // change the constructor so the object can be fully created and just add a run function
-    phonebook.run();
-    return(0);   
-}

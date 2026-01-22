@@ -1,11 +1,11 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRS = phonebook.cpp
+SRS = PhoneBook.cpp Contact.cpp main.cpp
 
 NAME = phonebook
 OBJS = $(SRS:.cpp=.o)
-HDRS = phonebook.hpp
+HDRS = PhoneBook.hpp Contact.hpp 
 
 all: $(NAME)
 
