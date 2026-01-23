@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 17:54:24 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/22 18:03:06 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/23 16:58:57 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ class Contact
 {
     private :
         std::string contact[5];
-        int     inprintable(std::string str);
+        int     imprintable(std::string str);
     public :
         void set_contact();
         const std::string* get_contact() const;
 };
-
+ 
 #endif

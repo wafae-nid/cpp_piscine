@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 12:22:02 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/22 18:33:32 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/23 20:05:09 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,20 @@ void PhoneBook::add()
 {
    Contact contact;
    contact.set_contact();
-   flag = 1;
-   if(count == 8)
-    count = 0;
-   book[count] = contact;
-   count++; 
+
+    if(count == 8)
+    {
+        count = 0;
+    }
+    if(flag >= 8)
+    {
+        flag = 8;
+    }
+    else
+        flag++;
+    book[count]= contact;
+    count++;
+    
 }
 void PhoneBook::exiting()
 {
@@ -61,7 +70,8 @@ void PhoneBook::dynamic_display()
 {
     std::string str;
     
-    for(int i = 0; i < count; i++)
+    
+    for(int i = 0; i < flag; i++)
     {
         line_display();
         std::cout<< '|'<< std::setw(10) << i;
@@ -82,7 +92,7 @@ void PhoneBook::entery_display(int index)
 {
     std::string str;
 
-    const char *fields[5] = {
+    const std::string fields[5] = {
     "First name",
     "Last name",
     "Nickname",
@@ -108,7 +118,7 @@ void PhoneBook::fetching()
         std::cout<< "you successfully exited the program \n";
         exit(0);
     }
-    while(input.length() != 1 || ( std::atoi(input.c_str()) < 0 || std::atoi(input.c_str()) >= count))
+    while(input.length() != 1 || !std::isdigit(input.c_str()[0]) || ( std::atoi(input.c_str()) < 0 || std::atoi(input.c_str()) >= flag))
     {
         std::cout<< "try again no entery has this index\n";
         if(!std::getline(std::cin, input))
@@ -126,7 +136,6 @@ void PhoneBook::fetching()
 }
 void PhoneBook::search()
 {
-    
     static_display();
     dynamic_display();
     fetching(); 

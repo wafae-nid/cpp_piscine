@@ -6,15 +6,14 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 17:53:48 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/22 18:03:41 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/23 17:15:46 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Contact.hpp"
 
-int Contact::inprintable(std::string str)
+int Contact::imprintable(std::string str)
 {
-
     int i;
 
     i = 0;
@@ -25,11 +24,12 @@ int Contact::inprintable(std::string str)
         }
         i++;
     }
-    return(0); 
+    return(0);
 }
+
 void Contact::set_contact()
 {
-  const char *fields[5] = {
+ const std::string fields[5] = {
     "First name",
     "Last name",
     "Nickname",
@@ -45,9 +45,9 @@ void Contact::set_contact()
             std::cout<< "you successfully exited the program \n";
             exit(0);
         }
-        if(contact[i].empty() || inprintable(contact[i]))
+        if(contact[i].empty() || imprintable(contact[i]))
         {
-            while(contact[i].empty() || inprintable(contact[i]))
+            while(contact[i].empty() || imprintable(contact[i]))
             {
                 std::cout<< "you can not enter an empty field try again !\n";
                 std::cout<<fields[i] <<" : ";
