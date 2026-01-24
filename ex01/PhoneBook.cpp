@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 12:22:02 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/23 20:05:09 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/24 16:18:11 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ PhoneBook::PhoneBook() {
 void PhoneBook::add()
 {
    Contact contact;
-   contact.set_contact();
+   contact.set_first_name();
+   contact.set_last_name();
+   contact.set_nickname();
+   contact.set_phone_number();
+   contact.set_darkest_secret();
 
     if(count == 8)
     {
@@ -51,7 +55,6 @@ void PhoneBook::line_display()
             std::cout<< '-';
         }
         std::cout<<'+'; 
-        // std::cout<< std::string(10,'-')<< '+';// use an other function to display ue line ;
     }
     std::cout<< '\n';
     
@@ -59,11 +62,19 @@ void PhoneBook::line_display()
 void PhoneBook::static_display()
 {
     line_display();
-    std::cout<< '|'<< std::setw(10) << "index"  ;
-    std::cout<< '|'<< std::setw(10) << "fisrt name" ;
-    std::cout<< '|'<< std::setw(10) << "last name" ;
-    std::cout<< '|'<< std::setw(10) << "nickname" << '|' ;
+    std::cout<< '|'<< std::setw(10) << "Index"  ;
+    std::cout<< '|'<< std::setw(10) << "Fisrt name" ;
+    std::cout<< '|'<< std::setw(10) << "Last name" ;
+    std::cout<< '|'<< std::setw(10) << "Nickname" << '|' ;
     std::cout<< '\n';
+}
+
+void PhoneBook::field_display(std::string str)
+{
+    if(str.length()> 10)
+        std::cout<< '|'<< std::setw(9) << str.substr(0,9)<< '.';
+    else
+        std::cout<< '|'<< std::setw(10) << str ;
 }
 
 void PhoneBook::dynamic_display()
@@ -75,37 +86,37 @@ void PhoneBook::dynamic_display()
     {
         line_display();
         std::cout<< '|'<< std::setw(10) << i;
-        for(int j = 0; j < 3;j++)
-        {
-            str = book[i].get_contact()[j];
-            if(str.length()> 10)
-                std::cout<< '|'<< std::setw(9) << str.substr(0,9)<< '.';
-            else
-                std::cout<< '|'<< std::setw(10) << str ;
-        }
+        str = book[i].get_first_name();
+        field_display(str);
+        str = book[i].get_last_name();
+        field_display(str);
+        str = book[i].get_nickname();
+        field_display(str);
         std::cout << '|';
         std::cout<< '\n';
     }
     line_display();
 }
+
 void PhoneBook::entery_display(int index)
 {
     std::string str;
 
-    const std::string fields[5] = {
-    "First name",
-    "Last name",
-    "Nickname",
-    "Phone number",
-    "darkest secret"
-    };
-    for (int i = 0; i < 5; i++) 
-    {
-        std::cout<< fields[i] << " : ";
-        str = book[index].get_contact()[i];
-        std::cout<< str ;
-        std::cout<<'\n';
-    }
+    std::cout<< "First name" << " : ";
+    str = book[index].get_first_name();
+    std::cout<< str << '\n';
+    std::cout<< "Last name" << " : ";
+    str = book[index].get_last_name();
+    std::cout<< str << '\n';
+    std::cout<< "Nickname" << " : ";
+    str = book[index].get_nickname();
+    std::cout<< str << '\n';
+    std::cout<< "Phone_number" << " : ";
+    str = book[index].get_phone_number();
+    std::cout<< str << '\n';
+    std::cout<< "Darkest secret" << " : ";
+    str = book[index].get_darkest_secret();
+    std::cout<< str << '\n';
     
 }
 void PhoneBook::fetching()

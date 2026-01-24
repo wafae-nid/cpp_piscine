@@ -2,7 +2,7 @@
 
 int main ()
 {
-    PhoneBook phonebook = PhoneBook();
+    PhoneBook phonebook ;
     phonebook.run();
     return(0);   
 }

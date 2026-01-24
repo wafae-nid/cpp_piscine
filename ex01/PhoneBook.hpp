@@ -14,6 +14,7 @@ class PhoneBook
         void    add();
         void    static_display();
         void    line_display();
+        void    field_display(std::string str);
         void    dynamic_display();
         void    entery_display(int index);
         void    fetching();
