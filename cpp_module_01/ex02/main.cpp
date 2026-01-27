@@ -5,18 +5,26 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 17:06:57 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/25 19:07:49 by wnid-hsa         ###   ########.fr       */
+/*   Created: 2026/01/26 11:44:20 by wnid-hsa          #+#    #+#             */
+/*   Updated: 2026/01/26 12:28:26 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#include <iostream>
 
 int main()
 {
-    Zombie *zombie;
-    zombie = newZombie("wafae");
-    zombie->announce();
-    delete(zombie);
-    randomChump("ahmed");
+    std::string str = "HI THIS IS BRAIN";
+    std::string* stringPTR = &str;
+    std::string& stringREF = str;
+    
+    std::cout << &str << "\n";
+    std::cout << &stringPTR << "\n";
+    std::cout << &stringREF << "\n";
+    
+    std::cout << str << "\n";
+    std::cout << *stringPTR << "\n";
+    std::cout << stringREF << "\n";
+    
+    
 }

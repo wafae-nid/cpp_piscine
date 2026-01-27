@@ -5,25 +5,24 @@
 #                                                     +:+ +:+         +:+      #
 #    By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/25 18:03:13 by wnid-hsa          #+#    #+#              #
-#    Updated: 2026/01/26 11:33:01 by wnid-hsa         ###   ########.fr        #
+#    Created: 2026/01/26 11:42:11 by wnid-hsa          #+#    #+#              #
+#    Updated: 2026/01/26 11:43:33 by wnid-hsa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRS = Zombie.cpp zombieHorde.cpp main.cpp
+SRS = main.cpp
 
-NAME = Moar_brainz
+NAME = hi_this_is_brain
 OBJS = $(SRS:.cpp=.o)
-HDRS = Zombie.hpp
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-%.o: %.cpp $(HDRS)
+%.o: %.cpp 
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

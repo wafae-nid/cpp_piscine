@@ -1,11 +1,9 @@
 CC = c++
-CFLAGS = #-Wall -Wextra -Werror -std=c++98
-
-SRS = PhoneBook.cpp Contact.cpp main.cpp
-
-NAME = phonebook
+CFLAGS = -Wall -Wextra -Werror -std=c++98
+SRS = Weapon.cpp HumanA.cpp main.cpp HumanB.cpp
+NAME = VOILENCE
 OBJS = $(SRS:.cpp=.o)
-HDRS = PhoneBook.hpp Contact.hpp 
+HDRS = HumanA.hpp Weapon.hpp HumanB.hpp
 
 all: $(NAME)
 

@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*    Weapon.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 17:06:57 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/25 19:07:49 by wnid-hsa         ###   ########.fr       */
+/*   Created: 2026/01/26 14:53:09 by wnid-hsa          #+#    #+#             */
+/*   Updated: 2026/01/26 16:12:15 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#include "Weapon.hpp"
 
-int main()
+Weapon::Weapon(std::string str)
 {
-    Zombie *zombie;
-    zombie = newZombie("wafae");
-    zombie->announce();
-    delete(zombie);
-    randomChump("ahmed");
+    type = str;
+}
+const std::string& Weapon::getType()const
+{
+    return(type);
+}
+void Weapon::setType(std::string str)
+{
+    type = str;
 }

@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   HumanB.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 17:06:57 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/25 19:07:49 by wnid-hsa         ###   ########.fr       */
+/*   Created: 2026/01/26 17:43:00 by wnid-hsa          #+#    #+#             */
+/*   Updated: 2026/01/26 19:09:17 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#ifndef HUMANB_HPP
+#define HUMANB_HPP
 
-int main()
+#include "Weapon.hpp"
+class HumanB
 {
-    Zombie *zombie;
-    zombie = newZombie("wafae");
-    zombie->announce();
-    delete(zombie);
-    randomChump("ahmed");
-}
+    private:
+        std::string name;
+        Weapon* weapon;
+    public:
+        HumanB(std::string str);
+        void setWeapon(Weapon& weapon_);
+        void attack();
+};
+
+#endif

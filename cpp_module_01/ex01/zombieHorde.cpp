@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 18:05:18 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/25 20:53:27 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/26 19:25:19 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 Zombie* zombieHorde(int N, std::string name)
 {
     Zombie *zombie;
+    //HANDLE OVERFLOW
     zombie = new Zombie[N];
     
     // for(int i = 0; i < N; i++) this could work but u initialize but u r making a stack objet temporaray for each and copy it here extra shit
