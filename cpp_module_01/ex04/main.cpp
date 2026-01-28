@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 21:55:52 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/27 00:51:57 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/28 17:40:13 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,14 @@
 
 void replace(std::string str, size_t pos, std::ofstream& out_file, std::string s2, std::string s1)
 {
-    out_file << str.substr(0,pos);
-    out_file << s2 ;
-    out_file << str.substr((pos + s1.length())) << "\n";
+     while(pos != std::string::npos)
+    {
+        out_file << str.substr(0,pos);
+        out_file << s2 ;
+        str = str.substr((pos+s1.length()));
+        pos = str.find(s1);
+    }
+    out_file << str << "\n";
 }
 std::string replace_name(char *s1)
 {
@@ -30,9 +35,9 @@ int main(int argc, char **argv)
     std::string in_line;
     std::string str;
     std::string str2;
-    size_t pos = 0;
+    size_t pos;
     
-    if(argc != 4)
+    if(argc != 4 || argv[1][0] == '\0' ||argv[2][0] == '\0')
     {
         std::cerr << "invalid number of parameters \n";
         return(1);
@@ -53,6 +58,8 @@ int main(int argc, char **argv)
     while(std::getline(in_File, in_line))
     {
         str = argv[2];
+        pos = 0;
+        str2 = argv[3];
         pos = in_line.find(str);
         if (pos == std::string::npos)
             out_File << in_line << "\n";
@@ -62,5 +69,4 @@ int main(int argc, char **argv)
             replace(in_line, pos, out_File,str2, str);
         }
     }
-    
 }

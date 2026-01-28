@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 18:32:00 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/27 22:17:01 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/28 17:59:57 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void Harl::complain(std::string level)
         "WARNING",
         "ERROR",
     };
-    while(str[i].compare(level))
+    while(i< 4 && str[i].compare(level))
         i++;
-    (this->*ptr[i])();
+    if(i<4)
+        (this->*ptr[i])();
 }

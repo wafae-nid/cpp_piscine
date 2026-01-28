@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*    HumanA.hpp                                        :+:      :+:    :+:   */
+/*   HumanA.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 14:58:06 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/26 15:59:55 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/28 14:26:41 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ class HumanA
 {
     private:
         std::string name;
-        Weapon& weapon;
+        const Weapon& weapon;
     public:
-        HumanA(std::string name, Weapon& weapon);
+        HumanA(std::string name, const Weapon& weapon);
         void attack();
 };
 

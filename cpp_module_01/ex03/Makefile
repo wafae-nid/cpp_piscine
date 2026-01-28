@@ -1,5 +1,5 @@
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror
 SRS = Weapon.cpp HumanA.cpp main.cpp HumanB.cpp
 NAME = VOILENCE
 OBJS = $(SRS:.cpp=.o)

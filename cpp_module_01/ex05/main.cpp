@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 22:03:38 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/27 22:15:39 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/28 18:04:35 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 int main()
 {
     Harl harl;
-    
     harl.complain("WARNING");
+    harl.complain("DEBUG");
 }

@@ -6,12 +6,12 @@
 #    By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/25 18:03:13 by wnid-hsa          #+#    #+#              #
-#    Updated: 2026/01/26 11:33:01 by wnid-hsa         ###   ########.fr        #
+#    Updated: 2026/01/28 12:56:05 by wnid-hsa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror
 
 SRS = Zombie.cpp zombieHorde.cpp main.cpp
 

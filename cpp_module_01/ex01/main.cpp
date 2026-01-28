@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 18:20:13 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/25 20:53:41 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/28 13:22:35 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,20 @@ int main()
 {
     Zombie z;
     Zombie *zombie;
-    zombie = zombieHorde(10, "wafae");
-    delete[]zombie;
+    {
+        zombie = zombieHorde(10, "wafae");
+        for(int i = 0; i<10; i++)
+        {
+            zombie[i].announce();
+        }
+        delete[]zombie;
+    }
+    {
+        zombie = zombieHorde(-10, "wafae");
+        if(!zombie)
+        {
+            std::cout<<"zombie is null\n";
+            return(1);
+        }
+    }
 }

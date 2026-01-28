@@ -6,12 +6,12 @@
 #    By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/26 11:42:11 by wnid-hsa          #+#    #+#              #
-#    Updated: 2026/01/26 11:43:33 by wnid-hsa         ###   ########.fr        #
+#    Updated: 2026/01/28 13:38:00 by wnid-hsa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror
 
 SRS = main.cpp
 
