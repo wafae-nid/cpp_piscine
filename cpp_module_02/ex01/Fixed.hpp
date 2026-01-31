@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 13:53:43 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/31 18:45:03 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/01/31 23:55:59 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 
 #include <iostream>
+#include <cmath>
 
 class Fixed
 {
@@ -26,8 +27,11 @@ class Fixed
         Fixed();
         Fixed(const Fixed& copy);
         Fixed(const int nbr);
+        Fixed(const float number);
         ~Fixed();
         Fixed& operator=(const Fixed& copy);
+        float toFloat( void ) const;
+        int toInt( void ) const;
         void setRawBits(int const raw);
         int getRawBits(void)const;
            
