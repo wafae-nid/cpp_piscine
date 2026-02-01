@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 13:53:29 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/02/01 00:01:00 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/02/01 16:53:39 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ Fixed& Fixed::operator=(const Fixed& copy)
       RawBits = copy.RawBits;
    }
    return(*this);  
+}
+std::ostream& operator<<(std::ostream& os,const Fixed& copy)
+{
+  os << copy.toFloat();
+  return(os);
 }
 Fixed::~Fixed(){
    

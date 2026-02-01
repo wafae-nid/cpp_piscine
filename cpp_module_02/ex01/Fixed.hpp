@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 13:53:43 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/31 23:55:59 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/02/01 16:53:16 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ class Fixed
         int toInt( void ) const;
         void setRawBits(int const raw);
         int getRawBits(void)const;
-           
+        
 };
+std::ostream& operator<<(std::ostream& os,const Fixed& copy);
 
 #endif
