@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 13:53:29 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/02/02 01:10:57 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/02/02 14:03:01 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,22 @@ Fixed::Fixed(const Fixed& copy)
 }
 Fixed::Fixed(const int nbr)
 {
-   RawBits = nbr << frac_bits;
+   if(nbr > (INT_MAX >> frac_bits))
+      RawBits = INT_MAX;
+   else if(nbr < (INT_MIN >> frac_bits))
+      RawBits = INT_MIN;
+   else
+      RawBits = nbr << frac_bits;
 }
 Fixed::Fixed(const float nbr)
 {
-   RawBits = roundf(nbr*(1 << frac_bits));
+
+   if(roundf(nbr*(1 << frac_bits))> INT_MAX)
+      RawBits = INT_MAX;
+   else if(roundf(nbr*(1 << frac_bits))< INT_MIN)
+      RawBits = INT_MIN;
+   else
+      RawBits = static_cast<int>(roundf(nbr*(1 << frac_bits)));
 }
 void Fixed::setRawBits(int const raw)
 {
@@ -80,17 +91,28 @@ bool Fixed::operator!=(const Fixed& copy)const
 Fixed Fixed::operator+(const Fixed& copy) const// HERE WE CANT RETURN A REFERENCE AS THIS VALUE WILL NOT BE AVAILABLE AFTER THIS {} SO RETURNING IT AS REF WILL GIVE  AREF TO A NON VALID OBJECT
 {
    Fixed fixed;
-   int   res;
-   res = this->RawBits + copy.RawBits;
-   fixed.setRawBits(res);
+   long long  res;
+   res = (long long)this->RawBits + (long long)copy.RawBits;
+   if(res > INT_MAX)
+      fixed.setRawBits(INT_MAX);
+   else if(res < INT_MIN)
+      fixed.setRawBits(INT_MIN);
+   else
+      fixed.setRawBits(res);
    return(fixed); 
 }
 Fixed Fixed::operator-(const Fixed& copy)const // HERE WE CANT RETURN A REFERENCE AS THIS VALUE WILL NOT BE AVAILABLE AFTER THIS {} SO RETURNING IT AS REF WILL GIVE  AREF TO A NON VALID OBJECT
 {
    Fixed fixed;
-   int   res;
-   res = this->RawBits - copy.RawBits;
-   fixed.setRawBits(res);
+   long  long res;
+   
+   res = (long long)this->RawBits - (long long)copy.RawBits;
+   if(res > INT_MAX)
+      fixed.setRawBits(INT_MAX);
+   else if(res < INT_MIN)
+      fixed.setRawBits(INT_MIN);
+   else
+      fixed.setRawBits(res);
    return(fixed); 
 }
 Fixed Fixed::operator*(const Fixed& copy)const// i promise to not modify this;
