@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 13:53:43 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/02/01 16:53:16 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/02/02 15:38:09 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <climits>
 
 class Fixed
 {

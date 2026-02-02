@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 13:53:29 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/02/02 14:03:01 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/02/02 15:46:01 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ Fixed::Fixed(const Fixed& copy)
 {
    RawBits = copy.RawBits;
 }
+Fixed& Fixed::operator=(const Fixed& copy)
+{
+   if(this != &copy)
+   {
+      RawBits = copy.RawBits;
+   }
+   return(*this);  
+}
 Fixed::Fixed(const int nbr)
 {
    if(nbr > (INT_MAX >> frac_bits))
@@ -32,9 +40,9 @@ Fixed::Fixed(const int nbr)
 Fixed::Fixed(const float nbr)
 {
 
-   if(roundf(nbr*(1 << frac_bits))> INT_MAX)
+   if(static_cast<int>(roundf(nbr*(1 << frac_bits)))> INT_MAX)
       RawBits = INT_MAX;
-   else if(roundf(nbr*(1 << frac_bits))< INT_MIN)
+   else if(static_cast<int>(roundf(nbr*(1 << frac_bits)))< INT_MIN)
       RawBits = INT_MIN;
    else
       RawBits = static_cast<int>(roundf(nbr*(1 << frac_bits)));
@@ -55,14 +63,6 @@ float Fixed::toFloat( void ) const
 int Fixed::toInt( void ) const
 {
    return(RawBits>> 8);
-}
-Fixed& Fixed::operator=(const Fixed& copy)
-{
-   if(this != &copy)
-   {
-      RawBits = copy.RawBits;
-   }
-   return(*this);  
 }
 bool Fixed::operator>(const Fixed& copy)const
 {
@@ -218,5 +218,4 @@ const Fixed& Fixed::max(const Fixed& a, const Fixed& b)
 }
 Fixed::~Fixed(){
    
-   std::cout<<"object destroyed \n";
 }

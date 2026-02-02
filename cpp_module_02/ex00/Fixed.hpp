@@ -6,7 +6,7 @@
 /*   By: wnid-hsa <wnid-hsa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 13:53:43 by wnid-hsa          #+#    #+#             */
-/*   Updated: 2026/01/31 17:56:13 by wnid-hsa         ###   ########.fr       */
+/*   Updated: 2026/02/02 15:24:56 by wnid-hsa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #ifndef FIXED_HPP
 #define FIXED_HPP
 
-
 #include <iostream>
+#include <climits>
 
 class Fixed
 {
