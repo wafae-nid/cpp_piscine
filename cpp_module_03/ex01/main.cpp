@@ -5,6 +5,6 @@ int main()
 {
     // ClapTrap clappy("wafae");
     // clappy.attack("ahmed");
-    ScavTrap Scav("wafae");
+    ScavTrap Scav;
     Scav.attack("ahmed");
 }

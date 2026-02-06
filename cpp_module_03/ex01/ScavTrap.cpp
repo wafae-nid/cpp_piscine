@@ -29,6 +29,34 @@
 // //     energy_points = 50;
 // //     attack_damage = 20;
 // }
+ScavTrap::ScavTrap():ClapTrap()
+{            
+    std::cout << "ScavTrap default constructor is called \n";
+    hit_points = 100;
+    energy_points = 50;
+    attack_damage = 20;
+}
+ScavTrap::ScavTrap(const ScavTrap& copy)
+{
+    std::cout << " ScavTrap Copy assignment operator called \n";
+    name = copy.name;
+    hit_points = copy.hit_points;
+    energy_points = copy.energy_points;
+    attack_damage = copy.attack_damage;
+    
+}
+ScavTrap& ScavTrap::operator=(const ScavTrap& copy)
+{
+   std::cout << " ScavTrap Copy assignment operator called \n";
+   if(this != &copy)
+   {
+      name = copy.name;
+        hit_points = copy.hit_points;
+        energy_points = copy.energy_points;
+        attack_damage = copy.attack_damage;
+   }
+   return(*this);  
+}
 ScavTrap::ScavTrap(const std::string& name_):ClapTrap(name_)
 {            
     std::cout << "ScavTrap constructor is called \n";

@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRS =  ClapTrap.cpp ScavTrap.cpp main.cpp
 
-NAME = ClapTrap
+NAME = ScavTrap
 OBJS = $(SRS:.cpp=.o)
 HDRS = ClapTrap.hpp ScavTrap.hpp
 

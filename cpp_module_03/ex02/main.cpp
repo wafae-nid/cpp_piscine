@@ -7,7 +7,6 @@ int main()
     // clappy.attack("ahmed");
     ScavTrap Scav("wafae");
     Scav.attack("ahmed");
-    FragTrap frag("wafoufa");
-    frag.attack("hamod");
+    FragTrap frag;
     frag.highFivesGuys();
 }

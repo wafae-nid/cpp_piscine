@@ -1,14 +1,11 @@
 
 #include "ClapTrap.hpp"
 
-// ClapTrap::ClapTrap()
-// {
-//     name = "wafae";
-//     hit_points = 10;
-//     energy_points = 10;
-//     attack_damage = 11;
-// }
 
+ClapTrap::ClapTrap():hit_points(10), energy_points(10), attack_damage(0)
+{
+    std::cout << "ClapTrap default constructor is called \n";
+}
 
 ClapTrap::ClapTrap(const std::string& name_)
     : name(name_), hit_points(10), energy_points(10), attack_damage(0)
