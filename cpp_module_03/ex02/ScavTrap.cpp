@@ -2,7 +2,7 @@
 #include "ScavTrap.hpp"
 
 
-ScavTrap::ScavTrap():ClapTrap()
+ScavTrap::ScavTrap()
 {            
     std::cout << "ScavTrap default constructor is called \n";
     hit_points = 100;
@@ -49,7 +49,7 @@ void ScavTrap::attack(const std::string& target)
     if(hit_points > 0 && energy_points > 0)
     {
         std::cout << "ScavTrap " << name << " attacks " << target << " ,causing " << attack_damage << " points of damage!" << "\n";
-        energy_points -= 1;
+        energy_points--;
     }
     else
         std::cout << "ScavTrap" << name << " cannot attack " << target <<  "\n";

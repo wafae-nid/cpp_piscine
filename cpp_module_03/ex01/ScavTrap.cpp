@@ -29,9 +29,17 @@
 // //     energy_points = 50;
 // //     attack_damage = 20;
 // }
-ScavTrap::ScavTrap():ClapTrap()
+
+ScavTrap::ScavTrap()
 {            
     std::cout << "ScavTrap default constructor is called \n";
+    hit_points = 100;
+    energy_points = 50;
+    attack_damage = 20;
+}
+ScavTrap::ScavTrap(const std::string& name_):ClapTrap(name_)
+{            
+    std::cout << "ScavTrap constructor is called \n";
     hit_points = 100;
     energy_points = 50;
     attack_damage = 20;
@@ -57,13 +65,6 @@ ScavTrap& ScavTrap::operator=(const ScavTrap& copy)
    }
    return(*this);  
 }
-ScavTrap::ScavTrap(const std::string& name_):ClapTrap(name_)
-{            
-    std::cout << "ScavTrap constructor is called \n";
-    hit_points = 100;
-    energy_points = 50;
-    attack_damage = 20;
-}
 //  if u dont call a destructor for this class The compiler-generated destructor will call the base class destructor automatically
 // BUT, the compiler-generated destructor does nothing extra for the derived part, because you didn’t write anything.
 
@@ -76,7 +77,7 @@ void ScavTrap::attack(const std::string& target)
     if(hit_points > 0 && energy_points > 0)
     {
         std::cout << "ScavTrap " << name << " attacks " << target << " ,causing " << attack_damage << " points of damage!" << "\n";
-        energy_points -= 1;
+        energy_points--;
     }
     else
         std::cout << "ScavTrap" << name << " cannot attack " << target <<  "\n";
