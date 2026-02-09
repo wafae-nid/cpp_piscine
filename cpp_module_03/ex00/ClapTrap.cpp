@@ -12,7 +12,7 @@ ClapTrap::ClapTrap(const std::string& name_)
 }
 ClapTrap::ClapTrap(const ClapTrap& copy)
 {
-    std::cout << " ClapTrap Copy assignment operator called \n";
+    std::cout << " ClapTrap Copy constructor called \n";
     name = copy.name;
     hit_points = copy.hit_points;
     energy_points = copy.energy_points;
@@ -51,18 +51,31 @@ void ClapTrap::takeDamage(unsigned int amount)
     if(hit_points > 0)
     {
         if(amount >= hit_points)
+        {
             hit_points = 0;
+            std::cout << "ClapTrap " << name << " takes Damage" <<  " ,causing " << "hit_points to be 0" << "\n";
+        }
         else
+        {
             hit_points -= amount;
-        std::cout << "ClapTrap " << name << " takes Damage" <<  " ,causing " << "hit_points to reduce by " << amount << "\n";
+            std::cout << "ClapTrap " << name << " takes Damage" <<  " ,causing " << "hit_points to reduce by " << amount << "\n";
+        }
     }
     else
         std::cout << "ClapTrap " << name << " can not take Damage"<< "\n";
 }
 void ClapTrap::beRepaired(unsigned int amount)
 {
+    long long res;
+
     if(hit_points > 0 && energy_points > 0)
     {
+        res = hit_points + amount;
+        if(res > INT_MAX)
+        {
+            std::cout << "overflow detected program will exit \n";
+            exit(1);
+        }
         hit_points += amount;
         energy_points--;
         std::cout << "ClapTrap " << name << " is repaired" <<  " ,causing " << "hit_points to be raised by " << amount<< "\n";

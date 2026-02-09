@@ -37,8 +37,6 @@ ScavTrap::ScavTrap(const std::string& name_):ClapTrap(name_)
     energy_points = 50;
     attack_damage = 20;
 }
-//  if u dont call a destructor for this class The compiler-generated destructor will call the base class destructor automatically
-// BUT, the compiler-generated destructor does nothing extra for the derived part, because you didn’t write anything.
 
 ScavTrap::~ScavTrap()
 {
