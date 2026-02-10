@@ -13,8 +13,12 @@ class Animal
         Animal(const std::string name);
         Animal(const Animal& copy);
         Animal& operator=(const Animal& copy);
-        ~Animal();
+        virtual~Animal(); // it needs to be virtual so if u called delete on animal that points on cat it will call destructor of cat not animal
+
+        const std::string getType(void)const;
+        void  settype(const std::string str);
         virtual void makeSound()const;
+
 
 };
 

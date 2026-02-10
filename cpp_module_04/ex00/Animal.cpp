@@ -30,6 +30,14 @@ Animal::~Animal()
 {
     std::cout <<"Animal destructor is called \n";
 }
+const std::string Animal::getType(void)const
+{
+    return(type);
+}
+void Animal::settype(const std::string str)
+{
+    type = str;
+}
 void Animal::makeSound()const
 {
     std::cout << "Animal makes sound\n";

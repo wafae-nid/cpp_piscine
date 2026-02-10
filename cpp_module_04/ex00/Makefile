@@ -3,10 +3,10 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRS = Animal.cpp  main.cpp Dog.cpp Cat.cpp
+SRS = Animal.cpp  main.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp
 NAME = Animal
 OBJS = $(SRS:.cpp=.o)
-HDRS = Animal.hpp Dog.hpp Cat.hpp
+HDRS = Animal.hpp Dog.hpp Cat.hpp WrongAnimal.hpp WrongCat.hpp
 
 all: $(NAME)
 
