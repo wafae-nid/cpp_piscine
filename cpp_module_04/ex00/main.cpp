@@ -15,7 +15,7 @@ int main()
     i->makeSound(); //will output the cat sound!
     j->makeSound();
     meta->makeSound();
-    delete meta; // delete show error if u have  a virtual function and destructor is not virtua 
+    delete meta; // delete show error if u have  a virtual function and destructor is not virtual 
     delete i;
     delete j;
 
