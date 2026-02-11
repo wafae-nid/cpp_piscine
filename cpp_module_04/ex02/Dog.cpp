@@ -29,7 +29,7 @@ Dog& Dog::operator=(const Dog& copy)
     if(this != &copy)
     {
         delete(brain);
-        brain = new Brain();
+        brain = new Brain(); // be sure it should be brain and not this; 
         *brain = *copy.brain; 
         type = copy.type;
     }
