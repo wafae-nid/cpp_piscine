@@ -2,6 +2,7 @@
 #define CLAPTRAP_HPP
 
 #include <iostream>
+#include <limits.h>
 
 class ClapTrap
 {
@@ -11,14 +12,15 @@ class ClapTrap
         unsigned int energy_points;
         unsigned int attack_damage;
     public:
-        void attack(const std::string& target);
-        void takeDamage(unsigned int amount);
-        void beRepaired(unsigned int amount);
         ClapTrap();
         ClapTrap(const std::string& name_);
         ClapTrap(const ClapTrap& copy);
         ClapTrap& operator=(const ClapTrap& copy);
         ~ClapTrap();
+        
+        void attack(const std::string& target);
+        void takeDamage(unsigned int amount);
+        void beRepaired(unsigned int amount);
 };
 
 

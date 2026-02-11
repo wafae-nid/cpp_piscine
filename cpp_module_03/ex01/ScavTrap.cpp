@@ -45,7 +45,7 @@ void ScavTrap::attack(const std::string& target)
 {
     if(hit_points > 0 && energy_points > 0)
     {
-        std::cout << "ScavTrap " << name << " attacks " << target << " ,causing " << attack_damage << " points of damage!" << "\n";
+        std::cout << "ScavTrap " << name << " attacks " << target << " ,causing " << attack_damage << " points of damage!\n";
         energy_points--;
     }
     else
@@ -53,5 +53,5 @@ void ScavTrap::attack(const std::string& target)
 }
 void ScavTrap::guardGate()
 {
-   std::cout << " ScavTrap is now in Gate keeper mode." << "\n"; 
+   std::cout << " ScavTrap is now in Gate keeper mode.\n"; 
 }

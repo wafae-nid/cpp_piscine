@@ -6,8 +6,8 @@ int main()
     {
         FragTrap frog("frog");
         frog.attack("target");
-        frog.takeDamage(21522);
-        frog.beRepaired(12533);
+        frog.takeDamage(-22);
+        frog.beRepaired(-3);
 
     }
     std::cout <<"***************************************************\n";

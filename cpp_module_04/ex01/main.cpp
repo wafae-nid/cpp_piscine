@@ -14,11 +14,11 @@ int main()
     {
         if(i < 50)
         {
-            Animals[i] = new Dog;
+            Animals[i] = new Dog();
         }
         else if(i>=50)
         {
-            Animals[i] = new Cat;
+            Animals[i] = new Cat();
         }
     }
 

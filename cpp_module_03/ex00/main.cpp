@@ -5,8 +5,8 @@ int main() {
     {
         ClapTrap clappy("clapp_clapp");
         clappy.attack("target");
-        clappy.takeDamage(21522);
-        clappy.beRepaired(12533);
+        clappy.takeDamage(-8);
+        clappy.beRepaired(-42);
     }
     std::cout <<"***************************************************\n";
     {

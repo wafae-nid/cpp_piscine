@@ -2,8 +2,8 @@
 #define AMETERIA_HPP
 
 #include <string>
-#include "ICharacter.hpp"
-
+// #include "ICharacter.hpp"
+#include <iostream>
 
 class AMateria
 {

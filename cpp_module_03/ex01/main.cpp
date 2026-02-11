@@ -6,8 +6,8 @@ int main() {
     {
         ScavTrap  Scav("scav_scav");
         Scav.attack("target");
-        Scav.takeDamage(21522);
-        Scav.beRepaired(12533);
+        Scav.takeDamage(-10);
+        Scav.beRepaired(-3);
         Scav.guardGate();
 
     }

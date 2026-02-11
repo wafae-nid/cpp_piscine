@@ -7,7 +7,7 @@ Cat::Cat()
     brain = new Brain();
 }
 
-Cat::Cat(const std::string name)
+Cat::Cat(const std::string name):Animal(name)
 {
     std::cout << "Cat constructor is called \n";
     type = name;

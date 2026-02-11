@@ -1,10 +1,16 @@
 
 #include "ScavTrap.hpp"
 
-
 ScavTrap::ScavTrap()
 {            
     std::cout << "ScavTrap default constructor is called \n";
+    hit_points = 100;
+    energy_points = 50;
+    attack_damage = 20;
+}
+ScavTrap::ScavTrap(const std::string& name_):ClapTrap(name_)
+{            
+    std::cout << "ScavTrap constructor is called \n";
     hit_points = 100;
     energy_points = 50;
     attack_damage = 20;
@@ -30,13 +36,6 @@ ScavTrap& ScavTrap::operator=(const ScavTrap& copy)
    }
    return(*this);  
 }
-ScavTrap::ScavTrap(const std::string& name_):ClapTrap(name_)
-{            
-    std::cout << "ScavTrap constructor is called \n";
-    hit_points = 100;
-    energy_points = 50;
-    attack_damage = 20;
-}
 
 ScavTrap::~ScavTrap()
 {
@@ -46,7 +45,7 @@ void ScavTrap::attack(const std::string& target)
 {
     if(hit_points > 0 && energy_points > 0)
     {
-        std::cout << "ScavTrap " << name << " attacks " << target << " ,causing " << attack_damage << " points of damage!" << "\n";
+        std::cout << "ScavTrap " << name << " attacks " << target << " ,causing " << attack_damage << " points of damage!\n";
         energy_points--;
     }
     else
@@ -54,5 +53,5 @@ void ScavTrap::attack(const std::string& target)
 }
 void ScavTrap::guardGate()
 {
-   std::cout << " ScavTrap is now in Gate keeper mode." << "\n"; 
+   std::cout << " ScavTrap is now in Gate keeper mode.\n"; 
 }

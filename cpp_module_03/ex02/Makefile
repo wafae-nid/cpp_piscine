@@ -1,5 +1,5 @@
 CC = c++
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 
 SRS =  ClapTrap.cpp ScavTrap.cpp FragTrap.cpp main.cpp
 

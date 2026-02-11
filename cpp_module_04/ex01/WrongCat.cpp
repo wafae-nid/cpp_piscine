@@ -6,7 +6,7 @@ WrongCat::WrongCat()
     std::cout << "WrongCat Default constructor is called \n";
 }
 
-WrongCat::WrongCat(const std::string name)
+WrongCat::WrongCat(const std::string name):WrongAnimal(name)
 {
     std::cout << "WrongCat constructor is called \n";
     type = name;

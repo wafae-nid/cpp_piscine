@@ -1,15 +1,16 @@
-
 #include "ClapTrap.hpp"
 
 ClapTrap::ClapTrap():name("default_name"),hit_points(10), energy_points(10), attack_damage(0)
 {
     std::cout << "ClapTrap default constructor is called \n";
 }
+
 ClapTrap::ClapTrap(const std::string& name_)
     : name(name_), hit_points(10), energy_points(10), attack_damage(0)
 {
     std::cout << "ClapTrap constructor is called \n";
 }
+
 ClapTrap::ClapTrap(const ClapTrap& copy)
 {
     std::cout << " ClapTrap Copy constructor called \n";
@@ -19,9 +20,10 @@ ClapTrap::ClapTrap(const ClapTrap& copy)
     attack_damage = copy.attack_damage;
     
 }
+
 ClapTrap& ClapTrap::operator=(const ClapTrap& copy)
 {
-   std::cout << " ClapTrap Copy assignment operator called \n";
+   std::cout << " ClapTrap Copy assignment operator called\n";
    if(this != &copy)
    {
       name = copy.name;
@@ -40,7 +42,7 @@ void ClapTrap::attack(const std::string& target)
 {
     if(hit_points > 0 && energy_points > 0)
     {
-        std::cout << "ClapTrap " << name << " attacks " << target << " ,causing " << attack_damage << " points of damage!" << "\n";
+        std::cout << "ClapTrap " << name << " attacks " << target << " ,causing " << attack_damage << " points of damage!\n";
         energy_points--;
     }
     else
@@ -53,16 +55,16 @@ void ClapTrap::takeDamage(unsigned int amount)
         if(amount >= hit_points)
         {
             hit_points = 0;
-            std::cout << "ClapTrap " << name << " takes Damage" <<  " ,causing " << "hit_points to be 0" << "\n";
+            std::cout << "ClapTrap " << name << " takes Damage ,causing hit_points to be 0\n";
         }
         else
         {
             hit_points -= amount;
-            std::cout << "ClapTrap " << name << " takes Damage" <<  " ,causing " << "hit_points to reduce by " << amount << "\n";
+            std::cout << "ClapTrap " << name << " takes Damage ,causing hit_points to reduce by " << amount << "\n";
         }
     }
     else
-        std::cout << "ClapTrap " << name << " can not take Damage"<< "\n";
+        std::cout << "ClapTrap " << name << " can not take Damage\n";
 }
 void ClapTrap::beRepaired(unsigned int amount)
 {
@@ -73,13 +75,13 @@ void ClapTrap::beRepaired(unsigned int amount)
         res = hit_points + amount;
         if(res > INT_MAX)
         {
-            std::cout << "overflow detected program will exit \n";
-            exit(1);
+            std::cout << "overflow detected \n";
+            return;
         }
         hit_points += amount;
         energy_points--;
-        std::cout << "ClapTrap " << name << " is repaired" <<  " ,causing " << "hit_points to be raised by " << amount<< "\n";
+        std::cout << "ClapTrap " << name << " is repaired ,causing hit_points to be raised by " << amount<< "\n";
     }
     else
-        std::cout << "ClapTrap " << name << " cannot be repaired" << "\n";  
+        std::cout << "ClapTrap " << name << " cannot be repaired\n";  
 }

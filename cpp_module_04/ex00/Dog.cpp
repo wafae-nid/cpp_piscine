@@ -6,7 +6,7 @@ Dog::Dog()
     std::cout << "Dog Default constructor is called \n";
 }
 
-Dog::Dog(const std::string name)
+Dog::Dog(const std::string name):Animal(name)
 {
     std::cout << "Dog constructor is called \n";
     type = name;

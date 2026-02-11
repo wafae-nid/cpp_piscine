@@ -7,7 +7,7 @@ Dog::Dog()
     brain = new Brain();
 }
 
-Dog::Dog(const std::string name)
+Dog::Dog(const std::string name):Animal(name)
 {
     std::cout << "Dog constructor is called \n";
     type = name;
