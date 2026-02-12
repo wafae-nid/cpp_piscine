@@ -1,10 +1,10 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRS = main.cpp AMateria.cpp Ice.cpp Cure.cpp
+SRS = main.cpp AMateria.cpp Ice.cpp Cure.cpp Character.cpp MateriaSource.cpp
 NAME = AMateria
 OBJS = $(SRS:.cpp=.o)
-HDRS = AMateria.hpp Ice.hpp Cure.hpp ICharacter.hpp
+HDRS = AMateria.hpp Ice.hpp Cure.hpp ICharacter.hpp Character.hpp MateriaSource.hpp IMateriaSource.hpp
 
 all: $(NAME)
 

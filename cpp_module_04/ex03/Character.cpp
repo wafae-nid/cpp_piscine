@@ -1,8 +1,8 @@
 #include "Character.hpp"
+#include "AMateria.hpp" // now we need full definitions as we already have just forward defenition of that class in header to avoid circular including
 
 Character::Character()
 {
-    std::cout << "Character default constructor is called \n";
     for(int i =0; i<4; i++)
     {
         slots[i] = NULL;
@@ -12,7 +12,6 @@ Character::Character()
 
 Character::Character(std::string const & name_): name(name_)
 {
-    std::cout << "Character constructor is called \n";
      for(int i =0; i<4; i++)
     {
         slots[i] = NULL;
@@ -22,7 +21,6 @@ Character::Character(std::string const & name_): name(name_)
 
 Character::Character(const Character& copy)
 {
-   std::cout << "Character copy constructor is called \n";
    name = copy.name;
    for(int i = 0 ; i < 4; i++)
    {
@@ -35,7 +33,6 @@ Character::Character(const Character& copy)
  
 Character& Character::operator=(const Character& copy)
 {
-    std::cout << "Character copy assignment operator is called \n";
     if(this != &copy)
     {
         name = copy.name;
@@ -53,7 +50,7 @@ Character& Character::operator=(const Character& copy)
 }
 Character::~Character()
 {
-    std::cout << "Character destructor is called \n";
+   
     // delete slots[]; wrong slots is not made by new[] to be able to be deleted by slots[]
 
     for(int i = 0; i < 4 ; i++)
@@ -97,7 +94,7 @@ void Character::unequip(int idx)
         slots[idx]= NULL;
     }
 }
-void Character::use(int idx, ICharacter& target)
+void Character::use(int idx, ICharacter& target) // when to use ICharacter and when to use character
 {
     if (idx < 0 || idx >= 4 || slots[idx] == NULL)
         return;

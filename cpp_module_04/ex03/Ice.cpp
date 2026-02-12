@@ -4,24 +4,20 @@
 Ice::Ice()
 {
     type="ice";
-    std::cout << "Ice default constructor is called \n";
 }
 
 Ice::Ice(std::string const & type):AMateria(type)
 {
-    std::cout << "Ice constructor is called \n";
 }
 
 Ice::Ice(const Ice& copy)
 {
-   std::cout << "Ice copy constructor is called \n";
    type = copy.type;
    
 }
 
 Ice& Ice::operator=(const Ice& copy)
 {
-    std::cout << "Ice copy assignment operator is called \n";
     if(this != &copy)
     {
         type = copy.type;
@@ -31,7 +27,6 @@ Ice& Ice::operator=(const Ice& copy)
 
 Ice::~Ice()
 {
-    std::cout << "Ice destructor is called \n";
 }
 
 Ice* Ice::clone() const
@@ -44,5 +39,5 @@ Ice* Ice::clone() const
 }
 void Ice::use(ICharacter& target)
 {
-   std::cout << "Ice: /" "* shoots an ice bolt at " <<  target.getName() << "/* /n"; 
+   std::cout << "* shoots an ice bolt at " <<  target.getName() << " * \n"; 
 }

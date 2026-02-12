@@ -1,7 +1,6 @@
 #ifndef CHARACTER_HPP
 #define CHARACTER_HPP
 
-#include "AMateria.hpp"
 #include "ICharacter.hpp"
 
 class Character: public ICharacter
@@ -23,9 +22,9 @@ class Character: public ICharacter
         void unequip(int idx);
         void use(int idx, ICharacter& target);
 
-}
+};
 
 
 
 
-#eCharacter
+#endif

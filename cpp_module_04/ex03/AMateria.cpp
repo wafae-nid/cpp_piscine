@@ -2,24 +2,20 @@
 
 AMateria::AMateria()
 {
-    std::cout << "AMateria default constructor is called \n";
 }
 
 AMateria::AMateria(std::string const & type_): type(type_)
 {
-    std::cout << "AMateria constructor is called \n";
 }
 
 AMateria::AMateria(const AMateria& copy)
 {
-   std::cout << "AMateria copy constructor is called \n";
    type = copy.type;
    
 }
 
 AMateria& AMateria::operator=(const AMateria& copy)
 {
-    std::cout << "AMateria copy assignment operator is called \n";
     if(this != &copy)
     {
         type = copy.type;
@@ -28,9 +24,7 @@ AMateria& AMateria::operator=(const AMateria& copy)
 }
 AMateria::~AMateria()
 {
-    std::cout << "AMateria destructor is called \n";
 }
-
  std::string const & AMateria::getType() const
 {
     return(type);
@@ -39,4 +33,8 @@ AMateria::~AMateria()
 void AMateria::setType(std::string const & type_)
 {
     type = type_;
+}
+void AMateria::use(ICharacter& target)
+{
+    (void) target; // just to silence linker error there is implementations in each child class
 }
