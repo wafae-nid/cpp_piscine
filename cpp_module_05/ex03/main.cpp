@@ -7,6 +7,14 @@ int main()
    AForm *aform;
 
 
-   aform = intern.makeForm("robotomy request", "target");
-   std::cout << aform->getName() << "\n";
+   try
+   {
+
+       aform = intern.makeForm("robttttt", "target");
+       std::cout << aform->getName() << "\n";
+    }
+    catch (std::exception & e)
+    {
+        std::cout << e.what() << "\n";
+    }
 }

@@ -1,15 +1,27 @@
 #include "ShrubberyCreationForm.hpp"
 #include "RobotomyRequestForm.hpp"
-
+#include "PresidentialPardonForm.hpp"
 int main()
 {
-    ShrubberyCreationForm stro;
+    Bureaucrat Burr;
+
     //  std::cout << stro.get_signing_grade();
-     stro.executeAction();
-    RobotomyRequestForm robot;
-    robot.executeAction();
-     RobotomyRequestForm roboti;
-     roboti.executeAction();
-     Bureaucrat Burr;
-     Burr.executeForm(robot);
+    try
+    {
+        RobotomyRequestForm robot;
+        robot.execute(Burr);
+    }
+    catch (std::exception & e)
+    {
+        std::cout << e.what() << "\n";
+    }
+    try
+    {
+        PresidentialPardonForm form;
+        form.execute(Burr);
+    }
+    catch (std::exception & e)
+    {
+        std::cout << e.what() << "\n";
+    }
 }

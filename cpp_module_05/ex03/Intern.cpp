@@ -40,7 +40,8 @@ AForm *Intern::PresidentialPardonFormCreator(std::string const & target)
 AForm *Intern::makeForm(const std::string& form_name, const std::string& target)
 {
     int i = 0;
-    
+    AForm *form;
+
     AForm *(Intern::*ptr[])(const std::string&)={
         &Intern::ShrubberyCreator,
         &Intern::RobotomyRequestCreator,
@@ -55,7 +56,11 @@ AForm *Intern::makeForm(const std::string& form_name, const std::string& target)
     while(i< 3&& str[i].compare(form_name))
         i++;
     if(i<3)
-        return(this->*ptr[i])(target);
+    {
+        form = (this->*ptr[i])(target);
+        std::cout << "Intern creates " << form->getName() << "\n";
+        return(form);
+    }
     throw FormNotFound();
 
 }
