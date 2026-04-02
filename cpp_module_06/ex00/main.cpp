@@ -2,5 +2,5 @@
 
 int main()
 {
-  ScalarConverter::convert("-inff");
+  ScalarConverter::convert("2147483648");
 }

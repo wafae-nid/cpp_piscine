@@ -21,3 +21,25 @@ void convert_pseuso_literals(const std::string& literal)
     std::cout<< literal[0];
   std::cout << d << "\n";
 }
+
+void convert_int(const std::string& literal)
+{
+    char *end;
+
+    double d = strtod(literal.c_str(), &end);
+
+    if(d > INT_MAX || d < INT_MIN)
+    {
+        std::cout<< "ERROR ! \n" << "This literal overflows as int try an other string literal\n";
+        return;
+    }
+    std::cout << "char: ";
+    if (static_cast<char>(d) < 32 || static_cast<char>(d)> 126)
+      std::cout << "Non displayable\n";
+    else
+      std::cout << "'" << static_cast<char>(d) << "' \n";
+    std::cout << "int: "<< static_cast<int>(d) << "\n";
+    std::cout << "float: "<< static_cast<float>(d) << ".0f\n";
+    std::cout << "double: "<< d << ".0\n";
+
+} 

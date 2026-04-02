@@ -24,7 +24,11 @@ ScalarConverter::~ScalarConverter()
 
 void ScalarConverter::convert(const std::string& literal)
 {
-  convert_pseuso_literals(literal);
+  if(is_pseudo_literals(literal))
+   convert_pseuso_literals(literal);
+  else if(is_int(literal))
+   convert_int(literal);
+
 }
 
 
