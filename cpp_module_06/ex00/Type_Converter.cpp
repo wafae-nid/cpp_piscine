@@ -81,3 +81,28 @@ void convert_double_float(const std::string& literal)
        std::cout << "\n";
        
 }
+
+void convert_char(const std::string& literal)
+{
+
+    char c = literal[0];
+
+
+    //if (c < 0 || c > 127)
+       // std::cout << "impossible\n";
+    std::cout << "char: ";
+    if (c < 32 || c > 126)
+      std::cout << "Non displayable\n";
+    else
+      std::cout << "'" << c << "' \n";
+    
+    std::cout << "int: ";
+    std::cout << static_cast<int>(c) << "\n";  
+    
+    std::cout << "float: "<< static_cast<float>(c) ;
+    std::cout<< ".0f\n";
+    
+    std::cout << "double: "<< static_cast<double>(c) ;
+    std::cout << ".0\n";
+
+}

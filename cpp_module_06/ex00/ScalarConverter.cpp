@@ -30,7 +30,13 @@ void ScalarConverter::convert(const std::string& literal)
    convert_int(literal);
   else if(is_double(literal)|| is_float(literal))
    convert_double_float(literal);
-   
+  else if(is_char(literal))
+    convert_char(literal);
+  else
+  {
+    std::cout << "The data type is invalid for conversion \n"<< "Types you can convert are: \n";
+    std::cout << "1- char\n"<< "2- int\n"<< "3- double\n"<< "4- float\n"<< "5- pseudo_literals\n" ;
+  }
 
 }
 
