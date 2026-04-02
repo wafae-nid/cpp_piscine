@@ -2,5 +2,5 @@
 
 int main()
 {
-  ScalarConverter::convert("2147483648");
+  ScalarConverter::convert("6.0");
 }

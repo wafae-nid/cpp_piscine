@@ -28,6 +28,9 @@ void ScalarConverter::convert(const std::string& literal)
    convert_pseuso_literals(literal);
   else if(is_int(literal))
    convert_int(literal);
+  else if(is_double(literal))
+   convert_double(literal);
+   
 
 }
 

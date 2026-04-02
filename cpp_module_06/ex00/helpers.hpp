@@ -16,5 +16,6 @@ bool is_char(const std::string& literal);
 
 void convert_pseuso_literals(const std::string& literal);
 void convert_int(const std::string& literal);
+void convert_double(const std::string& literal);
 
 #endif
