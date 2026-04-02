@@ -44,7 +44,7 @@ void convert_int(const std::string& literal)
 
 }
 
-void convert_double(const std::string& literal)
+void convert_double_float(const std::string& literal)
 {
     char *end;
 
