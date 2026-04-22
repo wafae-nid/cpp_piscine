@@ -47,6 +47,12 @@ Array<T>& Array<T>::operator=(const Array& copy)
     }
     return(*this);
 }
+template<typename T>
+
+Array<T>::~Array()
+{
+    delete[]array;
+}
 
 int main( void ) {
 
