@@ -54,14 +54,31 @@ Array<T>::~Array()
     delete[]array;
 }
 
+template<typename T>
+const char* Array<T>::IndexIsOutOfBounds::what()const throw()
+{
+    return "index is out of bounds\n";
+}
+
+template<typename T>
+T& Array<T>::operator[](unsigned int index)
+{
+    if(index < 0 || index > size)
+        throw(IndexIsOutOfBounds());
+    return(array[index]);
+}
+
 int main( void ) {
 
     Array<Test> arr(7);
     Array<Test> arr_2(5);
     arr_2 = arr;
-
-    for(int i =0;i<7;i++)
+    try
     {
-        std::cout<< arr_2.array[i].x << "\n";
+        std::cout << arr[6].x;
+    }
+    catch(std::exception &e)
+    {
+        std::cout << e.what();
     }
 }

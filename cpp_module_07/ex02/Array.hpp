@@ -1,9 +1,8 @@
 #ifndef ARRAY_HPP
 #define ARRAY_HPP
 
-
 #include<iostream>
-
+#include <exception>
 
 class Test
 {
@@ -21,9 +20,14 @@ class Array
         Array(const Array& copy);
         Array& operator=(const Array& copy);
         ~Array();
+        T& operator[](unsigned int n);
+        class  IndexIsOutOfBounds:public std::exception
+       {
+            public:
+                virtual const char* what()const throw();
+        };
     private:
        unsigned int size;
-
 
 };
 
