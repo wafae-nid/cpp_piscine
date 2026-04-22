@@ -25,7 +25,7 @@ Array<T>::Array(unsigned int n)
 template<typename T>
 Array<T>::Array(const Array& copy)
 {
-    lenght = copy.size;
+    lenght = copy.lenght;
     array = new T[lenght];
     for(unsigned int i = 0; i <lenght ; i++)
     {
@@ -72,8 +72,25 @@ const unsigned int& Array<T>::size(void)const
 {
     return(lenght);
 }
-int main( void ) {
 
+#define MAX_VAL 750
+int main(int, char**)
+{
+
+    Array<int> numbers(MAX_VAL);
+    int* mirror = new int[MAX_VAL];
+    srand(time(NULL));
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        const int value = rand();
+        numbers[i] = value;
+        mirror[i] = value;
+    }
+    //SCOPE                                                                     
+    {
+        Array<int> tmp = numbers;
+        Array<int> test(tmp);
+    }
     Array<Test> arr(7);
     Array<Test> arr_2(5);
     arr_2 = arr;
@@ -85,5 +102,7 @@ int main( void ) {
     {
         std::cout << e.what();
     }
-    std::cout<< arr.size();
+    std::cout<< arr.size() << "\n";
+
+    std::cout << "Program finished successfully" << std::endl;
 }
