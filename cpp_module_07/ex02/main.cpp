@@ -8,12 +8,12 @@ template<typename T>
 Array<T>::Array()
 {
     array = NULL;
-    size = 0;
+    lenght = 0;
 }
 template<typename T>
 Array<T>::Array(unsigned int n)
 {
-    size = n;
+    lenght = n;
     array = new T[n];
     if(array == NULL)
         return;
@@ -25,9 +25,9 @@ Array<T>::Array(unsigned int n)
 template<typename T>
 Array<T>::Array(const Array& copy)
 {
-    size = copy.size;
-    array = new T[size];
-    for(unsigned int i = 0; i <size ; i++)
+    lenght = copy.size;
+    array = new T[lenght];
+    for(unsigned int i = 0; i <lenght ; i++)
     {
         array[i]= copy.array[i];
     }
@@ -38,9 +38,9 @@ Array<T>& Array<T>::operator=(const Array& copy)
     if(this != &copy)
     {
         delete[]array;
-        size = copy.size;
-        array = new T[size];
-        for(unsigned int i = 0; i <size ; i++)
+        lenght = copy.lenght;
+        array = new T[lenght];
+        for(unsigned int i = 0; i <lenght ; i++)
         {
             array[i]= copy.array[i];
         }
@@ -63,11 +63,15 @@ const char* Array<T>::IndexIsOutOfBounds::what()const throw()
 template<typename T>
 T& Array<T>::operator[](unsigned int index)
 {
-    if(index < 0 || index > size)
+    if(index < 0 || index > lenght)
         throw(IndexIsOutOfBounds());
     return(array[index]);
 }
-
+template<typename T>
+const unsigned int& Array<T>::size(void)const
+{
+    return(lenght);
+}
 int main( void ) {
 
     Array<Test> arr(7);
@@ -75,10 +79,11 @@ int main( void ) {
     arr_2 = arr;
     try
     {
-        std::cout << arr[6].x;
+        std::cout << arr[6].x <<"\n";
     }
     catch(std::exception &e)
     {
         std::cout << e.what();
     }
+    std::cout<< arr.size();
 }
