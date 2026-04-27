@@ -22,9 +22,9 @@ AForm::AForm(const std::string name_, const unsigned int signing_grade_, const u
 :name(name_),is_signed(false),signing_grade(signing_grade_),execution_grade(execution_grade_)
 {
     if(signing_grade_ < 1 || execution_grade_ < 1)
-        throw AForm::GradeTooLowException();
-    else if(signing_grade_ > 150 || execution_grade_ > 150 )
         throw AForm::GradeTooHighException();
+    else if(signing_grade_ > 150 || execution_grade_ > 150 )
+        throw AForm::GradeTooLowException();
 }
 
 AForm::AForm(const AForm& copy)

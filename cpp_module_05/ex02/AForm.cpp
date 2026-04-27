@@ -14,7 +14,7 @@ const char* AForm::FormUnsignedException::what()const throw()
     return "The Form is unsigned \n";
 }
 
-AForm::AForm():name("Default"),is_signed(false),signing_grade(2), execution_grade(5)
+AForm::AForm():name("Default_Form"),is_signed(false),signing_grade(2), execution_grade(5)
 {
 }
 
@@ -22,9 +22,9 @@ AForm::AForm(const std::string name_, const unsigned int signing_grade_, const u
 :name(name_),is_signed(false),signing_grade(signing_grade_),execution_grade(execution_grade_)
 {
     if(signing_grade_ < 1 || execution_grade_ < 1)
-        throw AForm::GradeTooLowException();
-    else if(signing_grade_ > 150 || execution_grade_ > 150 )
         throw AForm::GradeTooHighException();
+    else if(signing_grade_ > 150 || execution_grade_ > 150 )
+        throw AForm::GradeTooLowException();
 }
 
 AForm::AForm(const AForm& copy)
@@ -66,10 +66,10 @@ unsigned int AForm::get_execution_grade(void)const
     return(execution_grade);
 }
 
-void AForm::set_is_signed(bool sign)
-{
-    is_signed = sign;
-}
+// void AForm::set_is_signed(bool sign)
+// {
+//     is_signed = sign;
+// }
 
 void AForm::beSigned(Bureaucrat& bureaucrat)
 {

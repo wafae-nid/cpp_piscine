@@ -1,6 +1,6 @@
 #include "ShrubberyCreationForm.hpp"
 
-ShrubberyCreationForm::ShrubberyCreationForm():target("Default_target")
+ShrubberyCreationForm::ShrubberyCreationForm():AForm("ShrubberyCreationForm", 145, 137),target("Default_target")
 {
 }
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string& target_)

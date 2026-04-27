@@ -49,9 +49,9 @@ AForm *Intern::makeForm(const std::string& form_name, const std::string& target)
     };
     
     std::string str[] = {
-        "shrubbery creation",
-        "robotomy request",
-        "presidential pardon",
+        "ShrubberyCreationForm",
+        "RobotomyRequestForm",
+        "PresidentialPardonForm",
     };
     while(i< 3&& str[i].compare(form_name))
         i++;

@@ -39,7 +39,7 @@ class Form
     unsigned int get_signing_grade(void)const;
     unsigned int get_execution_grade(void)const;
 
-    void set_is_signed(bool sign);
+    // void set_is_signed(bool sign);
     void beSigned(Bureaucrat& bureaucrat);
 };
 std::ostream& operator<<(std::ostream& os,const Form& copy);

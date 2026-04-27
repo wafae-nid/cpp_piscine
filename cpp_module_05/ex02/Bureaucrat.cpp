@@ -11,7 +11,7 @@ const char* Bureaucrat::GradeTooHighException::what()const throw()
 {
     return "Grade too high\n";
 }
-Bureaucrat::Bureaucrat():name("Default"),grade(1)
+Bureaucrat::Bureaucrat():name("Default_Bureaucrat"),grade(1)
 {
 }
 
@@ -57,30 +57,30 @@ unsigned int Bureaucrat::getGrade()const
 void Bureaucrat::setGrade(const unsigned int& grade_)
 {
      if(grade_ < 1)
-        throw Bureaucrat::GradeTooLowException();
-    else if(grade_ > 150)
         throw Bureaucrat::GradeTooHighException();
+    else if(grade_ > 150)
+        throw Bureaucrat::GradeTooLowException();
     grade = grade_;
 }
 
 void Bureaucrat::increment(void)
 {
-    unsigned long long grade_;
+    int grade_;
 
     grade_ =getGrade() - 1;  
     if(grade_ < 1)
-        throw Bureaucrat::GradeTooLowException();
-    grade = static_cast< unsigned int>(grade_);
+        throw Bureaucrat::GradeTooHighException();
+    grade = grade_;
 }
 
 void Bureaucrat::decrement(void)
 {
-    unsigned long long grade_;
-
+    int grade_;
+    
     grade_ =getGrade() + 1;  
     if(grade_ > 150)
-        throw Bureaucrat::GradeTooHighException();
-    grade = static_cast<unsigned int>(grade_);
+        throw Bureaucrat::GradeTooLowException();
+    grade = grade_;
 }
 
 void  Bureaucrat::signAForm(AForm& AForm)

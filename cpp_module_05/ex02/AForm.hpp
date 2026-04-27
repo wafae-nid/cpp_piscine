@@ -20,7 +20,7 @@ class AForm
         AForm(const std::string name_, const unsigned int signing_grade_, const unsigned int execution_grade_);
         AForm(const AForm& copy);
         AForm& operator=(const AForm& copy);
-        ~AForm();
+        virtual ~AForm();
 
 
         class GradeTooLowException:public std::exception
@@ -44,7 +44,7 @@ class AForm
     unsigned int get_signing_grade(void)const;
     unsigned int get_execution_grade(void)const;
 
-    void set_is_signed(bool sign);
+    // void set_is_signed(bool sign);
     void beSigned(Bureaucrat& bureaucrat);
     void execute(Bureaucrat const & executor) const;
     virtual void executeAction() const = 0;

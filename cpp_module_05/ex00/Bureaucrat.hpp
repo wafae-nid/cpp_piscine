@@ -20,7 +20,6 @@ class Bureaucrat
         const std::string getName(void)const;
         int getGrade(void)const; // int is returned by value no need to do const
         // void setName(const std::string& name_); cant have setname name is const
-        void setGrade(const int& grade_);
 
        class GradeTooLowException:public std::exception
        {

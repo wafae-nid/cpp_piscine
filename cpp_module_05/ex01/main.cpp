@@ -4,14 +4,17 @@
 int main()
 {
     
+    Form form("format", 2, 15);
+    Bureaucrat Bur("burrito", 3);
+    
+    Bur.signForm(form);
     try
     {
-        Form form("format", 2, 15);
-        Bureaucrat Bur("burrito", 3);
-        Bur.signForm(form);
+        Bur.increment();
     }
     catch (std::exception & e)
     {
         std::cout << e.what() << "\n";
     }
+    Bur.signForm(form);
 }

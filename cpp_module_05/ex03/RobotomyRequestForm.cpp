@@ -1,7 +1,7 @@
 #include "RobotomyRequestForm.hpp"
 
 bool RobotomyRequestForm::seeded = false;
-RobotomyRequestForm::RobotomyRequestForm():target("Default_target")
+RobotomyRequestForm::RobotomyRequestForm():AForm("RobotomyRequestForm", 72, 45),target("Default_target")
 {
     if(!seeded)
     {

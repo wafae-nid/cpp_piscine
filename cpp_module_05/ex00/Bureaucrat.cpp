@@ -17,9 +17,9 @@ Bureaucrat::Bureaucrat():name("Default"),grade(1)
 Bureaucrat::Bureaucrat(const std::string name_, const int grade_):name(name_)
 {
     if(grade_ < 1)
-        throw Bureaucrat::GradeTooLowException();
-    else if(grade_ > 150)
         throw Bureaucrat::GradeTooHighException();
+    else if(grade_ > 150)
+        throw Bureaucrat::GradeTooLowException();
     grade = grade_;
 }
 
@@ -53,33 +53,24 @@ int Bureaucrat::getGrade()const
     return(grade);
 }
 
-void Bureaucrat::setGrade(const int& grade_)
+void Bureaucrat::increment(void)
 {
-     if(grade_ < 1)
-        throw Bureaucrat::GradeTooLowException();
-    else if(grade_ > 150)
+    int grade_;
+
+    grade_ =getGrade() - 1;  
+    if(grade_ < 1)
         throw Bureaucrat::GradeTooHighException();
     grade = grade_;
 }
 
-void Bureaucrat::increment(void)
-{
-    long long grade_;
-
-    grade_ =getGrade() - 1;  
-    if(grade_ < 1)
-        throw Bureaucrat::GradeTooLowException();
-    grade = static_cast<int>(grade_);
-}
-
 void Bureaucrat::decrement(void)
 {
-    long long grade_;
+    int grade_;
 
     grade_ =getGrade() + 1;  
     if(grade_ > 150)
-        throw Bureaucrat::GradeTooHighException();
-    grade = static_cast<int>(grade_);
+        throw Bureaucrat::GradeTooLowException();
+    grade = grade_;
 }
 std::ostream& operator<<(std::ostream& os,const Bureaucrat& copy)
 {

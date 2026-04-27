@@ -3,12 +3,12 @@
 #include "PresidentialPardonForm.hpp"
 int main()
 {
-    Bureaucrat Burr;
+    Bureaucrat Burr("wafae",3);
 
     //  std::cout << stro.get_signing_grade();
+    RobotomyRequestForm robot;
     try
     {
-        RobotomyRequestForm robot;
         robot.execute(Burr);
     }
     catch (std::exception & e)
@@ -17,11 +17,29 @@ int main()
     }
     try
     {
-        PresidentialPardonForm form;
+        Burr.signAForm(robot);
+    }
+    catch(std::exception& e)
+    {
+        std::cout << e.what() << "\n";
+    }
+    PresidentialPardonForm form;
+    try
+    {
         form.execute(Burr);
     }
     catch (std::exception & e)
     {
         std::cout << e.what() << "\n";
     }
+    ShrubberyCreationForm shrubbery; 
+    try
+    {
+        shrubbery.execute(Burr);
+    }
+    catch(std::exception& e)
+    {
+        std::cout << e.what() << "\n";
+    }
+    
 }
