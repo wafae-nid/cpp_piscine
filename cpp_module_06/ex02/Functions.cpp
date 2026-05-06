@@ -29,33 +29,30 @@ void identify(Base& p)
 {
     try
     {
-        dynamic_cast<A&>(p);
-        std::cout << "its an A reference \n";
+        (void)dynamic_cast<A&>(p);
+        std::cout << "its an A type \n";
         return;
     }
     catch(std::exception &e)
     {
-        std::cout << e.what()<< "\n";
     }
     try
     {
-        dynamic_cast<B&>(p);
-        std::cout << "its an B reference \n";
+        (void)dynamic_cast<B&>(p);
+        std::cout << "its a B type\n";
         return;
     }
     catch(std::exception &e)
     {
-        std::cout << e.what()<< "\n";
     }
 
     try
     {
-        dynamic_cast<C&>(p);
-        std::cout << "its an B reference \n";
+        (void)dynamic_cast<C&>(p);
+        std::cout << "its a B type \n";
         return; // i need return because catching happens here so this function doesnt stop
     }
     catch(std::exception &e)
     {
-        std::cout << e.what()<< "\n";
     }
 }

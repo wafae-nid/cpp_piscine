@@ -3,16 +3,18 @@
 int main()
 {
   std::srand(std::time(NULL));
-  Base* obj = generate();
-  std::cout << "Pointer identify: ";
-  identify(obj);
+  for(int i = 0;i < 10;i++)
+  {
+    Base* obj = generate();
+    std::cout << "Pointer identify: ";
+    identify(obj);
 
-  std::cout << "Reference identify: ";
-  identify(*obj);
+    std::cout << "Reference identify: ";
+    identify(*obj);
 
-  std::cout << "----------------------\n";
+    std::cout << "----------------------\n";
 
-  delete obj; 
-
+    delete obj;
+  }
     return 0;
 }
