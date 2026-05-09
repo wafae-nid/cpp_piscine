@@ -6,7 +6,7 @@ PresidentialPardonForm::PresidentialPardonForm():target("Default_target")
 PresidentialPardonForm::PresidentialPardonForm(const std::string& target_)
 :AForm("PresidentialPardonForm", 25, 5),target(target_)
 {
-
+    
 }
 PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm& copy)
 :AForm(copy),target(copy.target) // AForm takes only the base portion of the copy 

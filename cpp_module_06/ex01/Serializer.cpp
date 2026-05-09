@@ -8,7 +8,7 @@ Serializer::Serializer()
 Serializer::Serializer(const Serializer& copy)
 {
   (void)copy;
-  // name  is const you cant change it but its okay if its in initialization list 
+  
    
 }
 

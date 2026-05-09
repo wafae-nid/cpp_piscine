@@ -2,9 +2,9 @@ CC = c++
 CFLAGS = -Wall -Wextra -Werror 
 
 SRS = main.cpp Serializer.cpp
-NAME = Serializer Data.hpp
+NAME = Serializer 
 OBJS = $(SRS:.cpp=.o)
-HDRS = Serializer.hpp
+HDRS = Serializer.hpp Data.hpp
 
 all: $(NAME)
 

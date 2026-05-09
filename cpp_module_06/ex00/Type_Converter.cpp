@@ -2,83 +2,63 @@
 
 void convert_pseuso_literals(const std::string& literal)
 {
-  char *end;
-  double d = strtod(literal.c_str(), &end);
-  int flag = 0;
 
   std::cout<< "char: impossible \n";
   std::cout<< "int: impossible \n";
-  if(literal[0] == '+')
-    flag = 1;
-
-  std::cout<< "float: ";
-  if(flag)
-    std::cout<< literal[0];
-  std::cout << static_cast<float>(d) << "f\n";
-
-  std::cout<< "double: ";
-  if(flag)
-    std::cout<< literal[0];
-  std::cout << d << "\n";
-}
-
-void convert_int(const std::string& literal)
-{
-    char *end;
-
-    double d = strtod(literal.c_str(), &end);
-
-    if(d > INT_MAX || d < INT_MIN)
-    {
-        std::cout<< "ERROR ! \n" << "This literal overflows as int try an other string literal\n";
-        return;
-    }
-    std::cout << "char: ";
-    if (static_cast<char>(d) < 32 || static_cast<char>(d)> 126)
-      std::cout << "Non displayable\n";
-    else
-      std::cout << "'" << static_cast<char>(d) << "' \n";
-    std::cout << "int: "<< static_cast<int>(d) << "\n";
-    std::cout << "float: "<< static_cast<float>(d) << ".0f\n";
-    std::cout << "double: "<< d << ".0\n";
+  if(literal == "nan" || literal == "inf" || literal == "+inf" || literal == "-inf" )
+  {
+    std::cout<< "float: " << literal << "f\n";
+    std::cout<< "double: " << literal << "\n";
+  }
+  else if (literal == "nanf" || literal == "+inff" || literal == "-inff" || literal == "inff")
+  {
+    std::cout<< "float: " << literal << "\n";
+    std::cout << "double: " << literal.substr(0, literal.size() - 1) << "\n";
+  }
 
 }
 
-void convert_double_float(const std::string& literal)
+void convert_number(double d)
 {
-    char *end;
 
-    double d = strtod(literal.c_str(), &end);
-    int flag = 0;
+  bool has_no_frac = false;
 
-    if (d == static_cast<int>(d))
-        flag = 1;
+  if(std::isnan(d))
+  { 
+    std::cout<< "char: impossible \n";
+    std::cout<< "int: impossible \n";
+    std::cout<< "float: nanf\n";
+    std::cout << "double: nan\n";
+    return;
+  }
+  
+  has_no_frac = (!std::isinf(d) && std::floor(d) == d );
     
-    std::cout << "char: ";
-    if (d < 0 || d > 127)
-        std::cout << "impossible\n";
-    else if (static_cast<char>(d) < 32 || static_cast<char>(d)> 126)
-      std::cout << "Non displayable\n";
-    else
-      std::cout << "'" << static_cast<char>(d) << "' \n";
+  std::cout << "char: ";
+  if (d < 0 || d > 127 )
+    std::cout << "impossible\n";
+  else if (static_cast<char>(d) < 32 || static_cast<char>(d)> 126)
+    std::cout << "Non displayable\n";
+  else
+    std::cout << "'" << static_cast<char>(d) << "' \n";
     
-    std::cout << "int: ";
-    if(d > INT_MAX || d < INT_MIN)
-       std::cout << "impossible\n";
-    else
-     std::cout << static_cast<int>(d) << "\n";  
-    
-    std::cout << "float: "<< static_cast<float>(d) ;
-    if(flag)
-        std::cout<< ".0f\n";
-    else
-        std::cout<< "f\n";
-    
-    std::cout << "double: "<< d ;
-    if(flag)
-       std::cout << ".0\n";
-    else
-       std::cout << "\n";
+  std::cout << "int: ";
+  if(d > std::numeric_limits<int>::max() || d < std::numeric_limits<int>::min())
+    std::cout << "impossible\n";
+  else
+    std::cout << static_cast<int>(d) << "\n";  
+   
+  std::cout << "float: "<< static_cast<float>(d) ;
+  if(has_no_frac && (!std::isinf(static_cast<float>(d))))
+    std::cout<< ".0f\n";
+  else
+    std::cout<< "f\n";
+
+  std::cout << "double: "<< d ;
+  if(has_no_frac)
+    std::cout << ".0\n";
+  else
+    std::cout << "\n";
        
 }
 
@@ -87,9 +67,6 @@ void convert_char(const std::string& literal)
 
     char c = literal[0];
 
-
-    //if (c < 0 || c > 127)
-       // std::cout << "impossible\n";
     std::cout << "char: ";
     if (c < 32 || c > 126)
       std::cout << "Non displayable\n";

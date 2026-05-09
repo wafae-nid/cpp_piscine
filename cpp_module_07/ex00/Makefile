@@ -17,7 +17,7 @@ SRS = main.cpp
 
 NAME =  Start_with_a_few
 OBJS = $(SRS:.cpp=.o)
-HDRS = header.hpp
+HDRS = whatever.hpp
 
 all: $(NAME)
 
