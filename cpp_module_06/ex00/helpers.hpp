@@ -20,5 +20,6 @@ void convert_pseuso_literals(const std::string& literal);
 // void convert_double_float(const std::string& literal);
 void convert_char(const std::string& literal);
 void convert_number(double d);
+std::string toLowerStr(std::string s);
 
 #endif

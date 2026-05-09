@@ -21,27 +21,32 @@ void convert_pseuso_literals(const std::string& literal)
 void convert_number(double d)
 {
 
+  if (std::isnan(d) || std::isinf(d))
+  {
+    std::cout << "char: impossible\n";
+    std::cout << "int: impossible\n";
+    std::cout << "float: " << static_cast<float>(d) << "f\n";
+    std::cout << "double: " << d << "\n";
+        return;
+  }
+
   bool has_no_frac = false;
 
-  if(std::isnan(d))
-  { 
-    std::cout<< "char: impossible \n";
-    std::cout<< "int: impossible \n";
-    std::cout<< "float: nanf\n";
-    std::cout << "double: nan\n";
-    return;
-  }
-  
-  has_no_frac = (!std::isinf(d) && std::floor(d) == d );
+  has_no_frac = (std::floor(d) == d);
     
   std::cout << "char: ";
   if (d < 0 || d > 127 )
     std::cout << "impossible\n";
-  else if (static_cast<char>(d) < 32 || static_cast<char>(d)> 126)
-    std::cout << "Non displayable\n";
+  
   else
-    std::cout << "'" << static_cast<char>(d) << "' \n";
-    
+  {
+    char c = static_cast<char>(d) ;
+    if(!std::isprint(static_cast<unsigned char>(c)))
+      std::cout << "Non displayable\n";
+    else
+      std::cout << "'" << c << "'\n";
+  }
+
   std::cout << "int: ";
   if(d > std::numeric_limits<int>::max() || d < std::numeric_limits<int>::min())
     std::cout << "impossible\n";

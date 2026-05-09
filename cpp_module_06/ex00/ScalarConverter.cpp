@@ -24,10 +24,10 @@ ScalarConverter::~ScalarConverter()
 
 void ScalarConverter::convert(const std::string& literal)
 {
-  
-  if(is_pseudo_literals(literal))
+  std::string lowered =  toLowerStr(literal);
+  if(is_pseudo_literals(lowered))
   {
-    convert_pseuso_literals(literal);
+    convert_pseuso_literals(lowered);
     return;
   }
   else if(is_char(literal))
