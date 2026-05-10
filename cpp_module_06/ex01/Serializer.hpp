@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cctype>
-
+#include <stdint.h>
 #include "Data.hpp"
 
 class Serializer
