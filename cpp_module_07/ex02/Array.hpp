@@ -1,40 +1,39 @@
 #ifndef ARRAY_HPP
 #define ARRAY_HPP
 
-#include<iostream>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include <exception>
 
-class Test
-{
-    public:
-        int x;
-        Test();
-};
+
 template<typename T>
 class Array
 {
+public:
+    Array();
+    Array(unsigned int n);
+    Array(const Array& copy);
+    Array& operator=(const Array& copy);
+    ~Array();
+
+    T& operator[](unsigned int index);
+    
+    const T& operator[](unsigned int index) const;
+
+    class IndexIsOutOfBounds : public std::exception
+    {
     public:
-        T *array;
+        virtual const char* what() const throw();
+    };
 
-        Array();
-        Array(unsigned int n);
-        Array(const Array& copy);
-        Array& operator=(const Array& copy);
-        ~Array();
+    unsigned int size() const;
 
-
-        T& operator[](unsigned int n);
-
-        class  IndexIsOutOfBounds:public std::exception
-       {
-            public:
-                virtual const char* what()const throw();
-        };
-
-        const unsigned int& size(void)const;   
-    private:
-       unsigned int lenght;
-
+private:
+    T* array;
+    unsigned int length;
 };
+
+#include "Array.tpp"
 
 #endif

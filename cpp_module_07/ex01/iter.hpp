@@ -5,21 +5,23 @@
 #include<iostream>
 
 template<typename T>
-void function(T &value)
+void increment(T &x)
 {
-    value = 42;
-
+    x++;
 }
+
 template<typename T>
-void print_array(T const &value)
+void print_array(T const &x)
 {
-    std::cout << value << "\n";
+    std::cout << x << "\n";
 }
 
-template<typename T_1, typename T_2>
+template<typename T, typename F>
 
-void iter(T_1 *array, size_t const &length, T_2 func)
+void iter(T *array, const size_t length, F func)
 {
+    if (!array)
+        return;
     for(size_t i = 0; i< length ; i++)
        func(array[i]);
 }

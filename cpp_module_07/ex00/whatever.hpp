@@ -15,16 +15,17 @@ void swap(T &value_1, T &value_2)
 }
 template<typename T>
 
-T min(T const &value_1, T const &value_2)
+const T& min(T const &value_1, T const &value_2)
 {
     if((value_1 >= value_2))
         return(value_2);
     else 
         return(value_1);
 }
+
 template<typename T>
 
-T max(T const &value_1, T const &value_2)
+const T& max(T const &value_1, T const &value_2)
 {
     if((value_1 <= value_2))
         return(value_2);
