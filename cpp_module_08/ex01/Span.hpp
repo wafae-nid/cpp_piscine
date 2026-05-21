@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-
+#include <deque>
 class SpanIsFull:public std::exception
 {
     public:
