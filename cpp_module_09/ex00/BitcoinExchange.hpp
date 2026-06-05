@@ -16,11 +16,14 @@ class BitcoinExchange
         std::map<std::string,float> map_db;
     public:
         BitcoinExchange();
-    // BitcoinExchange(const BitcoinExchange& copy);
-    // BitcoinExchange& operator=(const BitcoinExchange& copy);
-
+        // BitcoinExchange(const BitcoinExchange& copy);
+        // BitcoinExchange& operator=(const BitcoinExchange& copy);
+        
         ~BitcoinExchange();
-    
+        void processInput(const std::string& file);
+        void data_search(std::ifstream& input);
+        void processLine(std::string line);
+        bool is_valid_date(std::string date);
     
 };
 
