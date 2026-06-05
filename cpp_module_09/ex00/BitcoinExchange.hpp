@@ -24,7 +24,12 @@ class BitcoinExchange
         void data_search(std::ifstream& input);
         void processLine(std::string line);
         bool is_valid_date(std::string date);
-    
+        bool is_valid_year(std::string year);
+        bool is_all_digit(std::string year);
+        bool is_valid_month(std::string month);
+        bool is_valid_day(std::string day);
+        std::string trim(const std::string& s);
+        float parse_value(const std::string& val_str, bool& valid);
 };
 
 #endif
