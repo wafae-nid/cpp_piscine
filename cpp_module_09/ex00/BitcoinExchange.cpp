@@ -143,6 +143,14 @@ bool BitcoinExchange::is_valid_date(std::string date)
 
     return(true);
 }
+void BitcoinExchange::display_result(std::string date, float val)
+{
+    std::map<std::string,float>::iterator it;
+    it =  map_db.lower_bound(date);
+    float result = it->second * val;
+    std::cout << date<< " => " << val << " = " << result << std::endl;
+
+}
 void BitcoinExchange::processLine(std::string line)
 {
     size_t pipe ;
@@ -164,7 +172,7 @@ void BitcoinExchange::processLine(std::string line)
     float val = parse_value(val_str, valid);
     if (!valid)
         return;
-    (void)val;
+    display_result(date, val);
 }
 void BitcoinExchange::data_search(std::ifstream& input)
 {

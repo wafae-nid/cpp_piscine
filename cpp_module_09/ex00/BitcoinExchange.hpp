@@ -30,6 +30,7 @@ class BitcoinExchange
         bool is_valid_day(std::string day);
         std::string trim(const std::string& s);
         float parse_value(const std::string& val_str, bool& valid);
+        void display_result(std::string date, float val);
 };
 
 #endif
