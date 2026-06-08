@@ -1,6 +1,6 @@
 #include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe():has_leftover(false),leftover(-1)
+PmergeMe::PmergeMe()
 {
 
 }
@@ -18,76 +18,74 @@ void PmergeMe::print(const Container &c)
     std::cout << std::endl;
 }
 
-std::deque<pair> PmergeMe::make_pairs_deq(std::deque<int> d)
+template <typename Container>
+void PmergeMe::sort_pairs(Container& c, size_t block_size)
 {
-    pair p;
-    std::deque<pair> pairs;
+    size_t pair_size = block_size * 2;
 
-    size_t i = 0;
-    while((i + 1)< d.size())
-    {
-        int a = d[i];
-        int b = d[i+1];
-        if(a > b)
-        {
-            p.big = a;
-            p.small = b;
-        }
-        else
-        {
-            p.big = b;
-            p.small = a;
-        }
-        pairs.push_back(p);
-        i+=2;
-    }
-     if (i < vec.size())
-    {
-        leftover = vec[i];
-        has_leftover = true;
-    }
-    return(pairs);
-   
-}
-std::vector<pair> PmergeMe::make_pairs_vec(std::vector<int> d)
-{
-    pair p;
-    std::vector<pair> pairs;
+    if (pair_size > c.size())
+        return;
 
-    size_t i = 0;
-    while((i + 1)< d.size())
+    for (size_t i = 0; i + pair_size <= c.size(); i += pair_size)
     {
-        int a = d[i];
-        int b = d[i+1];
-        if(a > b)
+        size_t left_max  = i + block_size - 1;
+        size_t right_max = i + pair_size - 1;
+
+        if (c[left_max] > c[right_max])
         {
-            p.big = a;
-            p.small = b;
+            for (size_t j = 0; j < block_size; j++)
+                std::swap(c[i + j], c[i + block_size + j]);
         }
-        else
-        {
-            p.big = b;
-            p.small = a;
-        }
-        pairs.push_back(p);
-        i+=2;
     }
-     if (i < vec.size())
-    {
-        leftover = vec[i];
-        has_leftover = true;
-    }
-    return(pairs);
-   
+
+    sort_pairs(c, block_size * 2);
 }
+
+
 std::deque<int> PmergeMe::fordJohnsonDeque(std::deque<int> d)
 {
-    std::deque<pair> pairs = make_pairs_deq(d);
+    sort_pairs(d, 1);
+    print(d);
+    std::cout << "\n";
     return(d);
 } 
+void PmergeMe::build_chains(std::vector<int> v, std::vector<int> & main, std::vector<int>& pend)
+{
+    
+    if (v.size() == 0)
+        return;
+        
+    main.push_back(v[0]);
+
+    if (v.size() == 1)
+        return;
+
+    main.push_back(v[1]);
+    
+    for(size_t i =2; i< v.size(); i++)
+    {
+        if(i %2 != 0)
+            main.push_back(v[i]);
+        else
+            pend.push_back(v[i]);
+        
+    }
+}
 std::vector<int> PmergeMe::fordJohnsonVector(std::vector<int> v)
 {
-    std::vector<pair> pairs = make_pairs_vec(v);
+    std::vector<int> main_chain;
+    std::vector<int> pend;
+
+    sort_pairs(v, 1);
+    print(v);
+    std::cout << "\n";
+    build_chains(v, main_chain, pend);
+    std::cout << "*********\n";
+    print(main_chain);
+    std::cout << "\n";
+     std::cout << "*********\n";
+    print(pend);
+    std::cout << "\n";
     return(v);
 }
 bool PmergeMe::parse_input(std::string str)
