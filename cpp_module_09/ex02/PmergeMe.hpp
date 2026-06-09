@@ -35,10 +35,17 @@ class PmergeMe
       //std::vector<pair> make_pairs_vec(std::vector<int> d);
       //void build_chain_deq(std::vector<pair> const &pairs);
       //std::vector<int> build_chain_vec(std::vector<int> vec);
-      void build_chains(std::vector<int> v, std::vector<int> & main, std::vector<int>& pend);
+      template<typename Container>
+      void Jacobsthal_numbers(Container &c,size_t size, size_t block_size);
+      template<typename Container>
+      void build_chains(const Container& ,Container& main,
+                            Container& pend,size_t block_size);
       template <typename Container>
       void sort_pairs(Container& c, size_t block_size);
-      bool setup(char **argv, int argc);   
+      bool setup(char **argv, int argc); 
+      template<typename Container>
+       void build_insertion_order(const Container& jacob,Container& order);
+
     private:
         std::vector<int> vec;
         std::deque<int> deq; 

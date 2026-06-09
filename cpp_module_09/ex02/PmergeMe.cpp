@@ -39,36 +39,120 @@ void PmergeMe::sort_pairs(Container& c, size_t block_size)
     }
 
     sort_pairs(c, block_size * 2);
-}
 
+    Container main_chain;
+    Container pend;
+
+    build_chains(c, main_chain, pend, block_size);
+    Container jacob ;
+    Jacobsthal_numbers(jacob,pend.size(), block_size);
+    Container order;
+    build_insertion_order(jacob,order);
+   
+}
+template<typename Container>
+void PmergeMe::build_insertion_order(const Container& jacob,
+                           Container& order)
+{
+    size_t prev = 1;
+
+    for (size_t i = 0; i < jacob.size(); i++)
+    {
+        size_t current = jacob[i];
+
+        for (size_t j = current; j > prev; --j)
+            order.push_back(static_cast<int>(j));
+
+        prev = current;
+    }
+
+}
+template<typename Container>
+void PmergeMe::Jacobsthal_numbers(Container& c,
+                                  size_t size,
+                                  size_t block_size)
+{
+    c.clear();
+
+    size_t pend_blocks = size / block_size;
+
+    if (pend_blocks == 0)
+        return;
+
+    size_t max_label = pend_blocks + 1;
+
+    size_t j0 = 1;
+    size_t j1 = 3;
+
+    while (j1 <= max_label)
+    {
+        c.push_back(static_cast<int>(j1));
+
+        size_t next = j1 + 2 * j0;
+        j0 = j1;
+        j1 = next;
+    }
+
+    if (c.empty() || static_cast<size_t>(c.back()) != max_label)
+        c.push_back(static_cast<int>(max_label));
+}
 
 std::deque<int> PmergeMe::fordJohnsonDeque(std::deque<int> d)
 {
+    std::deque<int> main_chain;
+    std::deque<int> pend;
+
     sort_pairs(d, 1);
     print(d);
-    std::cout << "\n";
+    
     return(d);
-} 
-void PmergeMe::build_chains(std::vector<int> v, std::vector<int> & main, std::vector<int>& pend)
+}
+
+template<typename Container>
+void PmergeMe::build_chains(const Container& v,
+                            Container& main,
+                            Container& pend,
+                            size_t block_size)
 {
-    
-    if (v.size() == 0)
-        return;
-        
-    main.push_back(v[0]);
 
-    if (v.size() == 1)
+    main.clear();
+    pend.clear();
+
+    if (v.empty())
         return;
 
-    main.push_back(v[1]);
-    
-    for(size_t i =2; i< v.size(); i++)
+    size_t pair_size = block_size * 2;
+
+    bool first_pair = true;
+    size_t i;
+    for (i = 0; i + pair_size <= v.size(); i += pair_size)
     {
-        if(i %2 != 0)
-            main.push_back(v[i]);
+        size_t b_start = i;
+        size_t a_start = i + block_size;
+
+        if (first_pair)
+        {
+            for (size_t j = 0; j < block_size; j++)
+                main.push_back(v[b_start + j]);
+
+            for (size_t j = 0; j < block_size; j++)
+                main.push_back(v[a_start + j]);
+
+            first_pair = false;
+        }
         else
-            pend.push_back(v[i]);
-        
+        {
+            for (size_t j = 0; j < block_size; j++)
+                pend.push_back(v[b_start + j]);
+
+            for (size_t j = 0; j < block_size; j++)
+                main.push_back(v[a_start + j]);
+        }
+    }
+    if (i + block_size <= v.size())
+    {
+        for (size_t j = 0; j < block_size; j++)
+            pend.push_back(v[i + j]);
     }
 }
 std::vector<int> PmergeMe::fordJohnsonVector(std::vector<int> v)
@@ -78,13 +162,6 @@ std::vector<int> PmergeMe::fordJohnsonVector(std::vector<int> v)
 
     sort_pairs(v, 1);
     print(v);
-    std::cout << "\n";
-    build_chains(v, main_chain, pend);
-    std::cout << "*********\n";
-    print(main_chain);
-    std::cout << "\n";
-     std::cout << "*********\n";
-    print(pend);
     std::cout << "\n";
     return(v);
 }
