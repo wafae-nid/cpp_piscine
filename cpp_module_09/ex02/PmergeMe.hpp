@@ -9,12 +9,12 @@
 #include <limits.h>
 #include <ctime>
 
-struct pair
+struct PendInfo
 {
-    int big ;
-    int small;
-
+    int pend;
+    bool has_pair;
 };
+
 
 class PmergeMe
 {
@@ -37,14 +37,20 @@ class PmergeMe
       //std::vector<int> build_chain_vec(std::vector<int> vec);
       template<typename Container>
       void Jacobsthal_numbers(Container &c,size_t size, size_t block_size);
-      template<typename Container>
-      void build_chains(const Container& ,Container& main,
-                            Container& pend,size_t block_size);
+      template<typename Container, typename InfoContainer>
+      void build_chains(const Container& v,
+                            Container& main,
+                            Container& pend,
+                            InfoContainer& pend_cont,
+                            size_t block_size);
       template <typename Container>
       void sort_pairs(Container& c, size_t block_size);
       bool setup(char **argv, int argc); 
       template<typename Container>
        void build_insertion_order(const Container& jacob,Container& order);
+    template<typename Container>
+    void binary_insertion(const Container& order,Container& main,
+                        Container& pend,size_t block_size);
 
     private:
         std::vector<int> vec;

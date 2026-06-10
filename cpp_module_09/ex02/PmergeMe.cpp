@@ -1,5 +1,20 @@
 #include "PmergeMe.hpp"
 
+
+template<typename Container>
+struct InfoContainerFor;
+
+template<>
+struct InfoContainerFor<std::vector<int> >
+{
+    typedef std::vector<PendInfo> type;
+};
+
+template<>
+struct InfoContainerFor<std::deque<int> >
+{
+    typedef std::deque<PendInfo> type;
+};
 PmergeMe::PmergeMe()
 {
 
@@ -42,8 +57,8 @@ void PmergeMe::sort_pairs(Container& c, size_t block_size)
 
     Container main_chain;
     Container pend;
-
-    build_chains(c, main_chain, pend, block_size);
+    typename InfoContainerFor<Container>::type pend_cont;
+    build_chains(c, main_chain, pend, pend_cont,block_size);
     Container jacob ;
     Jacobsthal_numbers(jacob,pend.size(), block_size);
     Container order;
@@ -107,24 +122,39 @@ std::deque<int> PmergeMe::fordJohnsonDeque(std::deque<int> d)
     
     return(d);
 }
-
+// template<typename Container>
+// void PmergeMe::insert_member(int position, Container& main,Container& pend,size_t block_size)
+// {
+    
+// } 
 template<typename Container>
+void PmergeMe::binary_insertion(const Container& order,Container& main,
+                        Container& pend,size_t block_size)
+{
+    for(size_t i=0; i< order.size();i++)
+    {
+        insert_member(i, pend,main, block_size);
+    }
+}
+
+template<typename Container, typename InfoContainer>
 void PmergeMe::build_chains(const Container& v,
                             Container& main,
                             Container& pend,
+                            InfoContainer& pend_cont,
                             size_t block_size)
 {
-
     main.clear();
     pend.clear();
+    pend_cont.clear();
 
     if (v.empty())
         return;
 
     size_t pair_size = block_size * 2;
-
     bool first_pair = true;
     size_t i;
+
     for (i = 0; i + pair_size <= v.size(); i += pair_size)
     {
         size_t b_start = i;
@@ -145,14 +175,25 @@ void PmergeMe::build_chains(const Container& v,
             for (size_t j = 0; j < block_size; j++)
                 pend.push_back(v[b_start + j]);
 
+            PendInfo pend_;
+            pend_.pend = b_start;
+            pend_.has_pair = true;
+            pend_cont.push_back(pend_);
+
             for (size_t j = 0; j < block_size; j++)
                 main.push_back(v[a_start + j]);
         }
     }
+
     if (i + block_size <= v.size())
     {
         for (size_t j = 0; j < block_size; j++)
             pend.push_back(v[i + j]);
+
+        PendInfo pend_;
+        pend_.pend = i;
+        pend_.has_pair = false;
+        pend_cont.push_back(pend_);
     }
 }
 std::vector<int> PmergeMe::fordJohnsonVector(std::vector<int> v)
