@@ -13,6 +13,7 @@ struct PendInfo
 {
     int pend;
     bool has_pair;
+    int pair_pos;
 };
 
 
@@ -48,17 +49,15 @@ class PmergeMe
       bool setup(char **argv, int argc); 
       template<typename Container>
        void build_insertion_order(const Container& jacob,Container& order);
-    template<typename Container>
-    void binary_insertion(const Container& order,Container& main,
-                        Container& pend,size_t block_size);
-
+   template<typename Container,typename InfoContainer>
+   void binary_insertion(Container& main,InfoContainer& pend_cont,
+                 Container& pend, size_t block_size);
+    template<typename Container, typename InfoContainer>
+    size_t member_position(const Container& main,const Container& pend,
+        const InfoContainer& pend_cont,size_t pend_idx,size_t block_size);
     private:
         std::vector<int> vec;
         std::deque<int> deq; 
-
-       
-        //std::vector<int> main_chain_vec;
-        //std::vector<int> pend_vec;
 
         std::deque<int> main_chain_deq;
         std::deque<int> pend_deq;
