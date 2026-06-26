@@ -1,0 +1,517 @@
+================================================================================
+  C++ STL ALGORITHMS — Complete Guide (cpp_module_08)
+================================================================================
+
+Covers:
+  1. What are STL algorithms?
+  2. Algorithm categories
+  3. Algorithms used in cpp_module_08 (std::find, std::sort, std::distance)
+  4. How algorithms work with iterators
+  5. Other useful algorithms for 42
+
+
+================================================================================
+PART 1 — WHAT ARE STL ALGORITHMS?
+================================================================================
+
+STL algorithms are TEMPLATE FUNCTIONS that operate on containers through
+ITERATORS. They live in the <algorithm> header (and some in <numeric>).
+
+  Key idea:
+    Algorithms are DECOUPLED from containers.
+    They don't know about vector, list, or deque.
+    They only know about iterators (begin, end).
+
+    vector<int> v = {3, 1, 4, 1, 5};
+    list<int>   l = {3, 1, 4, 1, 5};
+
+    // SAME algorithm works on DIFFERENT containers:
+    std::sort(v.begin(), v.end());     // sort a vector
+    // std::sort(l.begin(), l.end());  // DOES NOT COMPILE! list iterators
+                                         // are bidirectional, not random-access
+
+    std::find(v.begin(), v.end(), 4);  // find in vector
+    std::find(l.begin(), l.end(), 4);  // find in list  (OK! only ++it needed)
+
+  Why this is powerful:
+    - Write once, works with any container that provides the right iterator
+    - Algorithms are tested, optimized, and standard
+    - No need to reimplement sort, search, etc. for each container
+
+  Header files:
+    #include <algorithm>     // most algorithms (find, sort, copy, etc.)
+    #include <numeric>       // accumulate, inner_product, etc.
+    #include <functional>    // function objects (less<T>, greater<T>, etc.)
+
+
+================================================================================
+PART 2 — ALGORITHM CATEGORIES
+================================================================================
+
+STL algorithms are grouped by what they do:
+
+--------------------------------------------------------------------------
+2.1 — Non-modifying sequence operations (read-only)
+--------------------------------------------------------------------------
+
+  Algorithm                What it does
+  -----------------------  ------------------------------------------------
+  std::find                Find first occurrence of a value
+  std::find_if             Find first match for a predicate
+  std::find_if_not         Find first non-match (C++11)
+  std::for_each            Apply a function to each element
+  std::count               Count occurrences of a value
+  std::count_if            Count matches for a predicate
+  std::equal               Check if two ranges are equal
+  std::mismatch            Find first position where two ranges differ
+  std::search              Search for a subsequence
+  std::adjacent_find       Find first pair of adjacent equal elements
+
+  Example:
+    std::vector<int> v = {5, 2, 8, 2, 9, 2};
+    int count = std::count(v.begin(), v.end(), 2);    // -> 3
+    auto it = std::find(v.begin(), v.end(), 8);        // -> points to 8
+
+--------------------------------------------------------------------------
+2.2 — Modifying sequence operations (write)
+--------------------------------------------------------------------------
+
+  Algorithm                What it does
+  -----------------------  ------------------------------------------------
+  std::copy                Copy elements to another range
+  std::copy_if             Copy elements matching a predicate
+  std::transform           Apply a function and store result
+  std::replace             Replace occurrences of a value
+  std::replace_if          Replace elements matching a predicate
+  std::fill                Fill a range with a value
+  std::generate            Fill a range with a generator function
+  std::remove              Remove elements equal to a value
+  std::unique              Remove consecutive duplicates
+  std::reverse             Reverse the order of elements
+  std::rotate              Rotate elements around a pivot
+  std::random_shuffle      Randomly shuffle elements (C++17: removed)
+  std::shuffle             Randomly shuffle (C++11, uses <random>)
+
+  Example:
+    std::vector<int> src = {1, 2, 3, 4, 5};
+    std::vector<int> dst(5);
+    std::copy(src.begin(), src.end(), dst.begin());   // dst = {1,2,3,4,5}
+
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    std::reverse(v.begin(), v.end());                  // v = {5,4,3,2,1}
+
+--------------------------------------------------------------------------
+2.3 — Sorting & related operations
+--------------------------------------------------------------------------
+
+  Algorithm                What it does
+  -----------------------  ------------------------------------------------
+  std::sort                Sort in ascending order (O(n log n))
+  std::stable_sort         Sort but preserve order of equal elements
+  std::partial_sort        Sort only the top N elements
+  std::nth_element         Partition so nth position is correct
+  std::binary_search       Check if value exists in SORTED range
+  std::lower_bound         First position not less than value (sorted range)
+  std::upper_bound         First position greater than value (sorted range)
+  std::equal_range         Get both lower and upper bound
+  std::merge               Merge two SORTED ranges
+  std::inplace_merge       Merge two consecutive sorted ranges in-place
+  std::is_sorted           Check if range is sorted
+  std::is_sorted_until     Find first unsorted position
+
+  Example:
+    std::vector<int> v = {9, 2, 5, 1, 7};
+    std::sort(v.begin(), v.end());                      // v = {1,2,5,7,9}
+
+    bool found = std::binary_search(v.begin(), v.end(), 5);  // -> true
+    // Note: binary_search only works on SORTED ranges!
+
+--------------------------------------------------------------------------
+2.4 — Set operations (on sorted ranges)
+--------------------------------------------------------------------------
+
+  Algorithm                What it does
+  -----------------------  ------------------------------------------------
+  std::set_union           Union of two sorted ranges
+  std::set_intersection    Intersection of two sorted ranges
+  std::set_difference      Elements in A but not in B
+  std::set_symmetric_diff  Elements in A or B but not both
+  std::includes            Check if A contains all of B
+
+--------------------------------------------------------------------------
+2.5 — Heap operations
+--------------------------------------------------------------------------
+
+  Algorithm                What it does
+  -----------------------  ------------------------------------------------
+  std::make_heap           Turn a range into a heap
+  std::push_heap           Add an element to a heap
+  std::pop_heap            Remove the top of the heap
+  std::sort_heap           Sort the heap (becomes sorted range)
+
+--------------------------------------------------------------------------
+2.6 — Min / Max
+--------------------------------------------------------------------------
+
+  Algorithm                What it does
+  -----------------------  ------------------------------------------------
+  std::min                 Return the smaller of two values
+  std::max                 Return the larger of two values
+  std::minmax              Return both min and max (C++11)
+  std::min_element         Find smallest element in range
+  std::max_element         Find largest element in range
+  std::minmax_element      Find both min and max in range
+
+  Example:
+    std::vector<int> v = {5, 2, 9, 1, 7};
+    auto min_it = std::min_element(v.begin(), v.end());  // -> points to 1
+    auto max_it = std::max_element(v.begin(), v.end());  // -> points to 9
+
+--------------------------------------------------------------------------
+2.7 — <numeric> algorithms
+--------------------------------------------------------------------------
+
+  Algorithm                What it does
+  -----------------------  ------------------------------------------------
+  std::accumulate          Sum (or generalized fold) over a range
+  std::inner_product       Dot product of two ranges
+  std::adjacent_difference Differences between adjacent elements
+  std::partial_sum         Running totals
+
+  Example:
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    int sum = std::accumulate(v.begin(), v.end(), 0);   // -> 15
+
+
+================================================================================
+PART 3 — ALGORITHMS USED IN cpp_module_08
+================================================================================
+
+
+--------------------------------------------------------------------------
+3.1 — std::find (used in ex00)
+--------------------------------------------------------------------------
+
+  Header:       <algorithm>
+  Signature:
+    template <typename InputIt, typename T>
+    InputIt find(InputIt first, InputIt last, const T& value);
+
+  What it does:
+    Searches the range [first, last) for the FIRST occurrence of 'value'.
+    Returns an iterator to it, or 'last' if not found.
+
+  Complexity:   O(n) — linear search
+
+  How it works internally (simplified):
+    template <typename InputIt, typename T>
+    InputIt find(InputIt first, InputIt last, const T& value) {
+        while (first != last) {
+            if (*first == value)   // compare element with value
+                return first;      // found!
+            ++first;               // move to next
+        }
+        return last;               // not found
+    }
+
+  Your usage in easyfind.hpp:
+
+    it = std::find(container.begin(), container.end(), to_find);
+    if (it == container.end())
+        throw NotFound();
+    return (it);
+
+  Key insights:
+    - Works with ANY container that has begin()/end() and supports ==
+    - ex00 tests with vector AND deque — both work because both provide
+      the input iterators that std::find needs
+    - If the value is not found, it returns container.end()
+    - That's why the check it == container.end() is needed
+
+--------------------------------------------------------------------------
+3.2 — std::sort (used in ex01)
+--------------------------------------------------------------------------
+
+  Header:       <algorithm>
+  Signature:
+    template <typename RandomIt>
+    void sort(RandomIt first, RandomIt last);
+
+    template <typename RandomIt, typename Compare>
+    void sort(RandomIt first, RandomIt last, Compare comp);
+
+  What it does:
+    Sorts the elements in [first, last) in ascending order.
+    Uses a hybrid algorithm (introsort = quicksort + heapsort + insertionsort).
+
+  Complexity:   O(n log n)
+
+  Iterator requirement:  RANDOM ACCESS ITERATOR only!
+    - Works with vector, deque, array
+    - Does NOT work with list, map, set (those are self-sorting)
+
+  Your usage in Span.cpp:
+
+    // shortestSpan():
+    std::vector<int> tmp(vec);        // copy the original
+    std::sort(tmp.begin(), tmp.end()); // sort the COPY (not the original!)
+    // now find the minimum difference between consecutive elements
+
+    // longestSpan():
+    std::vector<int> tmp(vec);        // copy the original
+    std::sort(tmp.begin(), tmp.end()); // sort the copy
+    return (tmp[tmp.size() - 1] - tmp[0]);  // max - min
+
+  Why the COPY?
+    - The subject says not to modify the original vector
+    - A sorted vector lets you find:
+      * longestSpan() = last - first (max - min)
+      * shortestSpan() = min difference between consecutive elements
+
+  Why does Span need sorting?
+    To find the SHORTEST distance, you need to compare adjacent elements.
+    Sorting puts elements in order, so the shortest distance is always
+    between two neighbors in the sorted array.
+
+    Unsorted:  {5, 18, 3, 40, 12}
+    Sorted:    {3, 5, 12, 18, 40}
+    Difference between neighbors:  2, 7, 6, 22
+    shortestSpan = 2  (between 3 and 5)
+
+    Without sorting, you'd need O(n^2) to check every pair.
+
+--------------------------------------------------------------------------
+3.3 — std::distance (used in ex01)
+--------------------------------------------------------------------------
+
+  Header:       <iterator>
+  Signature:
+    template <typename InputIt>
+    typename std::iterator_traits<InputIt>::difference_type
+    distance(InputIt first, InputIt last);
+
+  What it does:
+    Returns the number of elements between first and last.
+    Equivalent to: last - first (for random-access iterators)
+    But works with ALL iterator types (including bidirectional!).
+
+  Complexity:
+    - O(1) if the iterator is random-access (vector, deque)
+    - O(n) if the iterator is bidirectional (list, map)
+
+  Your usage in Span.hpp (range() template method):
+
+    template <typename T>
+    void range(T begin, T end) {
+        size_t dist = std::distance(begin, end);   // count elements
+        if (vec.size() + dist > N)                  // check capacity
+            throw SpanIsFull();
+        vec.insert(vec.end(), begin, end);           // insert all at once
+    }
+
+  Why std::distance here?
+    - The range() method takes ANY pair of iterators (T begin, T end)
+    - It needs to know how many elements will be inserted to check if
+      there's enough space
+    - std::distance works regardless of iterator type
+    - The template is generic: works with vector, list, deque, etc.
+
+  Without std::distance, you'd have to:
+    - Use end - begin (only works with random-access iterators)
+    - Or loop manually counting
+
+
+================================================================================
+PART 4 — HOW ALGORITHMS WORK WITH ITERATORS
+================================================================================
+
+STL algorithms are built on iterator categories. The algorithm's REQUIREMENTS
+determine which containers it can work with.
+
+  Algorithm         Iterator required        Works with
+  ---------------- -----------------------  ----------------------------
+  std::find         Input                   All containers
+  std::count        Input                   All containers
+  std::for_each     Input                   All containers
+  std::copy         Input + Output          All containers (to another)
+  std::reverse      Bidirectional           list, map, set, vector, deque
+  std::sort         Random Access           vector, deque, array
+  std::binary_search Random Access          vector, deque, array
+  std::equal_range  Random Access           vector, deque, array
+  std::distance     Input (but O(1) only    All containers (but O(n) for
+                    with random-access)      list, map, set)
+  std::advance      Input (but O(1) only    All containers
+                    with random-access)
+
+  Visual guide:
+
+    +--------------+        +--------------+        +--------------+
+    |    Input     | -----> |    Forward   | -----> | Bidirectional|
+    | (read only)  |        | (read+write) |        | (+ backward) |
+    +--------------+        +--------------+        +--------------+
+                                                          |
+                                                          v
+                                                  +--------------+
+                                                  |   Random     |
+                                                  |   Access     |
+                                                  |  (+ jump)    |
+                                                  +--------------+
+
+    std::find       needs  Input        -> works everywhere
+    std::reverse    needs  Bidirectional -> works on list, vector, deque
+    std::sort       needs  Random Access -> works only on vector, deque
+
+
+================================================================================
+PART 5 — OTHER USEFUL STL ALGORITHMS FOR THE 42 EXAMS
+================================================================================
+
+These algorithms are frequently useful in 42 exams and projects:
+
+--------------------------------------------------------------------------
+5.1 — std::for_each
+--------------------------------------------------------------------------
+
+  Applies a function to every element in a range.
+
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    std::for_each(v.begin(), v.end(), [](int x) {
+        std::cout << x * x << " ";    // -> 1 4 9 16 25
+    });
+
+  Useful when you want to do something to each element without writing
+  a manual loop.
+
+--------------------------------------------------------------------------
+5.2 — std::copy & std::copy_if
+--------------------------------------------------------------------------
+
+  Copy elements conditionally.
+
+    std::vector<int> src = {1, 2, 3, 4, 5};
+    std::vector<int> dst;
+
+    // Copy only even numbers:
+    std::copy_if(src.begin(), src.end(),
+                 std::back_inserter(dst),
+                 [](int x) { return x % 2 == 0; });
+    // dst = {2, 4}
+
+  std::back_inserter creates a special iterator that calls push_back()
+  when you write to it. Very useful with std::copy!
+
+--------------------------------------------------------------------------
+5.3 — std::transform
+--------------------------------------------------------------------------
+
+  Apply a function to each element and store the result.
+
+    std::vector<int> v = {1, 2, 3};
+    std::vector<int> result(3);
+    std::transform(v.begin(), v.end(), result.begin(),
+                   [](int x) { return x * 10; });
+    // result = {10, 20, 30}
+
+  You can also combine two ranges:
+
+    std::vector<int> a = {1, 2, 3};
+    std::vector<int> b = {4, 5, 6};
+    std::vector<int> sum(3);
+    std::transform(a.begin(), a.end(), b.begin(), sum.begin(),
+                   [](int x, int y) { return x + y; });
+    // sum = {5, 7, 9}
+
+--------------------------------------------------------------------------
+5.4 — std::accumulate (in <numeric>)
+--------------------------------------------------------------------------
+
+  Reduce a range to a single value (sum, product, etc.).
+
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    int sum = std::accumulate(v.begin(), v.end(), 0);          // -> 15
+    int product = std::accumulate(v.begin(), v.end(), 1,
+                                  std::multiplies<int>());     // -> 120
+
+  The third parameter is the initial value. The function defaults to +.
+
+--------------------------------------------------------------------------
+5.5 — std::remove / std::remove_if
+--------------------------------------------------------------------------
+
+  "Remove" elements matching a value. Note: it doesn't actually erase them!
+  It moves the non-removed elements to the front and returns an iterator to
+  the new end. You must then call erase().
+
+    std::vector<int> v = {1, 2, 3, 2, 4, 2, 5};
+    auto new_end = std::remove(v.begin(), v.end(), 2);
+    // v is now {1, 3, 4, 5, ?, ?, ?}
+    v.erase(new_end, v.end());     // erase the "dead" tail
+    // v = {1, 3, 4, 5}
+
+  This is called the "erase-remove idiom". Very common in C++.
+
+--------------------------------------------------------------------------
+5.6 — std::replace / std::replace_if
+--------------------------------------------------------------------------
+
+  Replace values in-place.
+
+    std::vector<int> v = {1, 2, 3, 2, 4, 2};
+    std::replace(v.begin(), v.end(), 2, 99);
+    // v = {1, 99, 3, 99, 4, 99}
+
+--------------------------------------------------------------------------
+5.7 — std::min_element / std::max_element
+--------------------------------------------------------------------------
+
+  Find the smallest/largest element in a range.
+
+    std::vector<int> v = {5, 2, 9, 1, 7};
+    auto min = std::min_element(v.begin(), v.end());  // -> points to 1
+    auto max = std::max_element(v.begin(), v.end());  // -> points to 9
+
+  This is exactly how you COULD implement longestSpan() without sorting!
+
+    unsigned int longestSpan() {
+        auto min = std::min_element(vec.begin(), vec.end());
+        auto max = std::max_element(vec.begin(), vec.end());
+        return *max - *min;
+    }
+
+  But sorting is needed for shortestSpan() because you need to find the
+  minimum GAP between adjacent elements, which requires ordering.
+
+
+================================================================================
+PART 6 — SUMMARY: ALGORITHMS IN cpp_module_08
+================================================================================
+
+  +--------------+------------+---------------+---------------------------+
+  | Algorithm    | Exercise   | Header        | Purpose                   |
+  +--------------+------------+---------------+---------------------------+
+  | std::find    | ex00       | <algorithm>   | Find a value in container |
+  | std::sort    | ex01       | <algorithm>   | Sort to find dist. spans  |
+  | std::distance| ex01       | <iterator>    | Count elements in range   |
+  +--------------+------------+---------------+---------------------------+
+
+  std::find in ex00:
+    - Searches linearly for a value
+    - Returns iterator or end()
+    - Works with ALL container types
+    - Your easyfind template wraps it with an exception on failure
+
+  std::sort in ex01:
+    - Sorts a COPY of the vector (doesn't modify original)
+    - Requires random-access iterator -> works with vector/deque
+    - Enables O(n) shortestSpan() and O(1) longestSpan()
+    - Without sorting: shortestSpan() would be O(n^2)
+
+  std::distance in ex01:
+    - Counts elements between two iterators
+    - Used in the range() template to check capacity BEFORE inserting
+    - Works with ANY iterator type (generic template!)
+
+
+================================================================================
+END OF DOCUMENT
+================================================================================

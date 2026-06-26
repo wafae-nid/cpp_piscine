@@ -23,6 +23,17 @@ int main()
     {  
         std::cout << e.what()<< "\n";
     }
+    const std::vector <int> c_v(v1);
+    try
+    {
+        std::cout << "const cont \n";
+        std::vector<int>::iterator it = easyfind(v1, 40);
+        std::cout<< *it << "\n";
+    }
+      catch(std::exception &e)
+    {  
+        std::cout << e.what()<< "\n";
+    }
     try
     {
         std::vector<int>::iterator it = easyfind(v1, 80);

@@ -1,0 +1,584 @@
+================================================================================
+  C++ ITERATORS — Complete Guide (cpp_module_08)
+================================================================================
+
+Covers:
+  1. Iterator hierarchy & types
+  2. Iterator invalidation rules (vector / deque / list)
+  3. Reverse iterators (rbegin / rend / internal mechanics)
+
+
+================================================================================
+PART 1 — ITERATOR HIERARCHY & TYPES
+================================================================================
+
+Iterators in C++ follow a STRICT HIERARCHY. Each type inherits all the
+capabilities of the one before it:
+
+                              Output
+                                |
+    Input --> Forward --> Bidirectional --> Random Access
+                                |
+                          (Contiguous)   <-- C++17, vector/array only
+
+
+--------------------------------------------------------------------------
+1.1 — Input Iterator
+--------------------------------------------------------------------------
+
+Capabilities:    Read a value, move forward (++it)
+
+  Operation         Supported?
+  *it (read)             YES
+  ++it / it++            YES
+  it1 == it2 / !=        YES
+  *it (write)             NO
+  --it (go back)          NO
+  it[n] (index)           NO
+  it + n                  NO
+  Multi-pass              NO  (single-pass only)
+
+Real-world example:  std::istream_iterator (reads from std::cin)
+
+    std::istream_iterator<int> it(std::cin);   // reads from keyboard
+    std::cout << *it;                           // prints first int typed
+    ++it;                                       // moves to next int
+    // You CANNOT go back or re-read!
+
+
+--------------------------------------------------------------------------
+1.2 — Output Iterator
+--------------------------------------------------------------------------
+
+Capabilities:    Write a value, move forward
+
+  Operation         Supported?
+  *it = value (write)    YES
+  ++it / it++            YES
+  *it (read)              NO
+  --it                    NO
+  it1 == it2              NO
+
+Real-world example:  std::ostream_iterator (writes to std::cout)
+
+    std::ostream_iterator<int> it(std::cout, " ");
+    *it = 42;     // writes "42 " to console
+    ++it;
+    *it = 100;    // writes "100 "
+
+
+--------------------------------------------------------------------------
+1.3 — Forward Iterator
+--------------------------------------------------------------------------
+
+Capabilities:    Combines Input + Output. Read AND write. Multi-pass.
+
+  Operation         Supported?
+  *it (read+write)        YES
+  ++it / it++             YES
+  it1 == it2 / !=         YES
+  Multi-pass              YES
+  --it (go back)           NO
+  it[n]                    NO
+
+Containers using this type:
+  std::forward_list         (singly-linked list)
+  std::unordered_map        (hash map)
+  std::unordered_set        (hash set)
+
+    std::forward_list<int> fl = {1, 2, 3};
+    auto it = fl.begin();
+    ++it;             // YES - advance
+    // --it;          // NO  - compile error
+
+
+--------------------------------------------------------------------------
+1.4 — Bidirectional Iterator
+--------------------------------------------------------------------------
+
+Capabilities:    Like Forward, but can ALSO go BACKWARD (--it).
+
+  Operation         Supported?
+  *it (read+write)        YES
+  ++it / --it             YES
+  it1 == it2 / !=         YES
+  Multi-pass              YES
+  it[n]                    NO
+  it + n                   NO
+
+Containers using this type:
+  std::list               (doubly-linked list)
+  std::map                (ordered tree map)
+  std::set                (ordered tree set)
+  std::multimap / std::multiset
+
+    std::list<int> lst = {1, 2, 3, 4, 5};
+    auto it = lst.begin();
+    ++it;          // YES -> 2
+    --it;          // YES <- 1
+    // int x = it[2];   NO - no index access
+    // it + 3;          NO - no jump
+
+
+--------------------------------------------------------------------------
+1.5 — Random Access Iterator
+--------------------------------------------------------------------------
+
+Capabilities:    Like Bidirectional, but can JUMP anywhere in O(1).
+
+  Operation         Supported?
+  *it (read+write)        YES
+  ++it / --it             YES
+  it[n]                   YES  (same as *(it + n))
+  it + n / it - n         YES  (O(1) jump)
+  it1 - it2               YES  (distance in O(1))
+  it1 < it2 / > / <= / >= YES  (comparison)
+
+Containers using this type:
+  std::vector             (dynamic array)
+  std::deque              (double-ended queue)
+  std::array              (fixed-size array)
+  std::string             (its iterators are random-access)
+
+    std::vector<int> vec = {10, 20, 30, 40, 50};
+    auto it = vec.begin();
+    it += 3;              // YES - jump to index 3 -> 40
+    std::cout << *it;     // -> 40
+    std::cout << it[1];   // -> 50  (relative index)
+    --it;                 // YES <- 30
+    int dist = vec.end() - vec.begin();  // YES -> 5
+
+
+--------------------------------------------------------------------------
+SUMMARY TABLE: Iterator types per container
+--------------------------------------------------------------------------
+
+  +--------------------------+------------------+--------+--------+---------+
+  |       Container          | Iterator Type    | ++it   | --it   | it[n]   |
+  +--------------------------+------------------+--------+--------+---------+
+  | vector                   | RANDOM ACCESS    |  YES   |  YES   |  YES    |
+  | deque                    | RANDOM ACCESS    |  YES   |  YES   |  YES    |
+  | array                    | RANDOM ACCESS    |  YES   |  YES   |  YES    |
+  | string                   | RANDOM ACCESS    |  YES   |  YES   |  YES    |
+  | list                     | BIDIRECTIONAL    |  YES   |  YES   |   NO    |
+  | map / set                | BIDIRECTIONAL    |  YES   |  YES   |   NO    |
+  | forward_list             | FORWARD          |  YES   |   NO   |   NO    |
+  | unordered_map / set      | FORWARD          |  YES   |   NO   |   NO    |
+  | stack/queue/priority_q   | NONE (adapters)  |   NO   |   NO   |   NO    |
+  +--------------------------+------------------+--------+--------+---------+
+
+
+--------------------------------------------------------------------------
+Why this matters in cpp_module_08
+--------------------------------------------------------------------------
+
+  ex00 - easyfind:
+    Your template calls std::find(begin, end, value).
+    Works with both vector<int> (random-access) and deque<int> (random-access).
+
+  ex02 - MutantStack:
+    The underlying container determines the iterator type:
+      MutantStack<int>               -> deque  -> random-access iterator
+      MutantStack<int, list<int>>    -> list   -> bidirectional iterator
+    Both work for ++it, *it, --it.
+    But it + 5 works ONLY for the deque version!
+
+
+================================================================================
+PART 2 — ITERATOR INVALIDATION RULES
+================================================================================
+
+Iterator invalidation = when an iterator becomes "stale" (points to invalid
+memory). Using an invalidated iterator = UNDEFINED BEHAVIOR (crash, corruption).
+
+
+--------------------------------------------------------------------------
+2.1 — std::vector (strictest rules)
+--------------------------------------------------------------------------
+
+  Rule:
+    Reallocation?  -> ALL iterators are invalidated.
+    No reallocation? -> Only those AFTER the modification point are invalidated.
+
+  Operation                          Iterators invalidated
+  ---------------------------        -----------------------------------------
+  push_back() w/o reallocation       None (until C++11) / end() only (C++11+)
+  push_back() WITH reallocation      ALL - memory was moved
+  insert(pos, x)                     All starting from pos (inclusive)
+  erase(pos)                         All starting from pos (inclusive)
+  pop_back()                         Only end() and iterator to last element
+  clear()                            ALL
+  reserve() that triggers realloc    ALL
+  resize() that grows                ALL (potential reallocation)
+  operator[] / at() / front()/back() None (read-only)
+
+  Example:
+
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    auto it = v.begin() + 2;      // points to 3
+    v.insert(v.begin(), 0);       // !!! ALL iterators invalidated (shift!)
+    std::cout << *it;              // UNDEFINED BEHAVIOR!
+
+    // Correct way:
+    std::vector<int> v2 = {1, 2, 3, 4, 5};
+    auto it2 = v2.begin() + 2;    // points to 3
+    v2.push_back(6);               // WITHOUT reallocation -> it2 still valid!
+    std::cout << *it2;             // OK -> 3
+
+  Why?
+    insert/erase at front/middle shifts all subsequent elements.
+    push_back with reallocation allocates new memory block.
+
+
+--------------------------------------------------------------------------
+2.2 — std::deque (more complex rules)
+--------------------------------------------------------------------------
+
+  Rule:
+    insert/erase at front or back -> only iterators to that element invalidated.
+    insert/erase in the middle    -> ALL iterators invalidated.
+
+  Operation                          Iterators invalidated
+  ---------------------------        -----------------------------------------
+  push_front()                       None (C++11+)
+  push_back()                        None (C++11+)
+  pop_front()                        Only iterator to erased element
+  pop_back()                         Only iterator to erased element
+  insert() at front/back             None (C++11+)
+  insert() in the middle             ALL (central map restructured)
+  erase() at front/back              Only iterator to erased element
+  erase() in the middle              ALL
+
+  Example:
+
+    std::deque<int> d = {10, 20, 30, 40, 50};
+    auto it_mid = d.begin() + 2;     // points to 30
+    d.push_front(0);                  // it_mid still valid!
+    std::cout << *it_mid;             // OK -> 30
+
+    d.insert(d.begin() + 1, 99);     // insert near front
+    // it_mid might still be valid (insert at front/back)
+    std::cout << *it_mid;             // OK -> 30
+
+    d.insert(d.begin() + 2, 999);    // insert in MIDDLE
+    // it_mid is INVALIDATED! (ALL iterators invalidated for middle insert)
+
+  Why?
+    deque stores data in FIXED-SIZE BLOCKS + a central MAP.
+    Adding at front/back adds a new block without moving existing ones.
+    Modifying in the middle may restructure the central map.
+
+
+--------------------------------------------------------------------------
+2.3 — std::list (most permissive rules)
+--------------------------------------------------------------------------
+
+  Rule:
+    Only the iterator to the REMOVED element is invalidated.
+    ALL OTHER iterators remain valid.
+
+  Operation                          Iterators invalidated
+  ---------------------------        -----------------------------------------
+  push_front() / push_back()         None
+  pop_front() / pop_back()           Only iterator to removed element
+  insert()                           None (new node created, others untouched)
+  erase(pos)                         Only pos
+  clear()                            ALL (list is emptied)
+  splice()                           None (nodes moved, pointers stay valid)
+  merge()                            None
+
+  Example:
+
+    std::list<int> lst = {1, 2, 3, 4, 5};
+    auto it  = lst.begin();                  // points to 1
+    auto it3 = std::next(lst.begin(), 2);    // points to 3
+
+    lst.push_front(0);                       // it and it3 still valid!
+    lst.push_back(6);                        // still valid!
+    lst.erase(std::next(lst.begin(), 3));    // removes 2, but:
+    std::cout << *it;                        // OK -> 1
+    std::cout << *it3;                       // OK -> 3
+    lst.erase(it3);                          // removes 3
+    std::cout << *it3;                       // UNDEFINED - node deleted!
+
+  Why?
+    list is a DOUBLY-LINKED LIST. Each node is individually allocated.
+    Nodes NEVER move in memory. As long as the node exists, the iterator works.
+    Only iterators pointing to a deleted node die.
+
+
+--------------------------------------------------------------------------
+COMPLETE INVALIDATION COMPARISON TABLE
+--------------------------------------------------------------------------
+
+  +---------------------------+-----------+-----------+-----------+
+  |        Operation          |  vector   |   deque   |   list    |
+  +---------------------------+-----------+-----------+-----------+
+  | push_back()               | end() or  |   None    |   None    |
+  |                           | ALL*      |           |           |
+  | push_front()              |   N/A     |   None    |   None    |
+  | pop_back()                | last+end  |  last     | removed   |
+  | pop_front()               |   N/A     |  first    | removed   |
+  | insert() at beginning     | from pos  |   None    |   None    |
+  | insert() in middle        | from pos  |   ALL     |   None    |
+  | insert() at end           | end()**   |   None    |   None    |
+  | erase() at beginning      | from pos  |  first    | removed   |
+  | erase() in middle         | from pos  |   ALL     | removed   |
+  | erase() at end            | end()     |  last     | removed   |
+  | resize()                  | depends***|  depends  | removed   |
+  | clear()                   |   ALL     |   ALL     |   ALL     |
+  +---------------------------+-----------+-----------+-----------+
+
+  * ALL = with reallocation; None = without reallocation
+  ** None without reallocation (C++11+)
+  *** depends on whether reallocation occurs
+
+
+--------------------------------------------------------------------------
+Why this matters in cpp_module_08
+--------------------------------------------------------------------------
+
+  ex01 - Span:
+    addNumber() calls _vec.push_back(n).
+    If you keep a stored iterator into _vec before push_back, it might get
+    invalidated on reallocation. That's why you NEVER store persistent
+    iterators to a vector that grows dynamically.
+
+  ex02 - MutantStack:
+    MutantStack<int> ms;
+    ms.push(1);
+    ms.push(2);
+    auto it = ms.begin();    // points to 1
+    ms.push(3);              // it is STILL VALID
+                              // (deque push_back doesn't invalidate
+                              //  iterators to existing elements)
+
+
+================================================================================
+PART 3 — REVERSE ITERATORS (rbegin / rend)
+================================================================================
+
+
+--------------------------------------------------------------------------
+3.1 — The basic idea
+--------------------------------------------------------------------------
+
+A reverse iterator traverses the container BACKWARD.
+
+    std::vector<int> v = {1, 2, 3, 4, 5};
+
+    // Normal (left to right):
+    for (auto it = v.begin(); it != v.end(); ++it)
+        std::cout << *it << " ";    // -> 1 2 3 4 5
+
+    // Reverse (right to left):
+    for (auto rit = v.rbegin(); rit != v.rend(); ++rit)
+        std::cout << *rit << " ";   // -> 5 4 3 2 1
+
+  Visual diagram:
+
+    begin()                                          end()
+       v                                               v
+    +------+------+------+------+------+
+    |  1   |  2   |  3   |  4   |  5   |
+    +------+------+------+------+------+
+       ^                                               ^
+    rend()                                          rbegin()
+
+    rbegin() points to the LAST element.   (reverse of begin)
+    rend()   points BEFORE the first.      (reverse of end)
+    ++rit moves BACKWARD in the container.
+
+
+--------------------------------------------------------------------------
+3.2 — How it works internally: std::reverse_iterator
+--------------------------------------------------------------------------
+
+A reverse iterator is just an ADAPTER around a normal iterator. It uses the
+class template std::reverse_iterator<Iterator>.
+
+  Simplified implementation:
+
+    template <typename Iterator>
+    class reverse_iterator {
+    private:
+        Iterator current;      // the underlying normal iterator
+
+    public:
+        explicit reverse_iterator(Iterator x) : current(x) {}
+
+        // Dereference: returns the element BEFORE current
+        reference operator*() const {
+            Iterator tmp = current;
+            return *(--tmp);          // THE KEY TRICK!
+        }
+
+        // ++ in reverse = -- in normal
+        reverse_iterator& operator++() {
+            --current;                // reverse ++ = normal --
+            return *this;
+        }
+
+        // -- in reverse = ++ in normal
+        reverse_iterator& operator--() {
+            ++current;                // reverse -- = normal ++
+            return *this;
+        }
+
+        // Get the underlying normal iterator
+        Iterator base() const {
+            return current;
+        }
+    };
+
+  THE SECRET is in operator*():
+    When you do *rit, the reverse iterator does NOT dereference where it
+    points. It steps BACK one position FIRST, then dereferences.
+    Why? Because end() points PAST the last element, so
+    reverse_iterator(end()) must point to the LAST element (end - 1).
+
+
+--------------------------------------------------------------------------
+3.3 — The off-by-one trick
+--------------------------------------------------------------------------
+
+This is the most important subtlety:
+
+  Normal iterators:
+    begin() = &v[0]     -> dereferences to v[0] = 1
+    end()   = &v[5]     -> dereference = UNDEFINED (out of bounds)
+
+  Reverse iterators:
+    rbegin() = reverse_iterator(end())     -> *rit = *(end() - 1) = v[4] = 5
+    rend()   = reverse_iterator(begin())   -> *rit = *(begin() - 1) = UNDEFINED
+
+  Correspondence table:
+
+    Expression               Normal equivalent      What it points to
+    ----------------------   --------------------   -------------------------
+    v.rbegin()               reverse(v.end())       last element
+    v.rend()                 reverse(v.begin())      before first element
+    v.rbegin() + 1           reverse(v.end() - 1)   second-to-last
+    v.rend() - 1             reverse(v.begin() + 1) first element
+
+    std::vector<int> v = {10, 20, 30, 40, 50};
+    auto rit = v.rbegin();           // logically points to 50
+
+    // Get the underlying normal iterator:
+    auto base = rit.base();          // = v.end()  (points PAST 50)
+    std::cout << *(base - 1);        // -> 50  (must go back one)
+
+
+--------------------------------------------------------------------------
+3.4 — The golden rule
+--------------------------------------------------------------------------
+
+  &*rit  ==  &*(rit.base() - 1)
+
+    vector:  [ 10 | 20 | 30 | 40 | 50 ]
+                  ^                    ^
+               begin()               end()
+                  ^                    ^
+        rend().base()          rbegin().base()
+
+    *rbegin() == v.back()      (last element)
+    *rend()   is UNDEFINED     (before first element)
+
+
+--------------------------------------------------------------------------
+3.5 — Reverse iterators with std::list (bidirectional)
+--------------------------------------------------------------------------
+
+Works the same but WITHOUT random access (+n / -n):
+
+    std::list<int> lst = {1, 2, 3, 4, 5};
+    for (auto rit = lst.rbegin(); rit != lst.rend(); ++rit)
+        std::cout << *rit << " ";    // -> 5 4 3 2 1
+
+    int x = *lst.rbegin();            // -> 5
+    // auto rit2 = lst.rbegin() + 3;  // NO - no random access for list
+
+
+--------------------------------------------------------------------------
+3.6 — Adding reverse iterators to MutantStack (ex02)
+--------------------------------------------------------------------------
+
+You could easily add them:
+
+    // =====[ AI ADDED - reverse iterator support ]====================
+    typedef std::reverse_iterator<iterator> reverse_iterator;
+
+    reverse_iterator rbegin() { return reverse_iterator(this->c.end()); }
+    reverse_iterator rend()   { return reverse_iterator(this->c.begin()); }
+
+    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+
+    const_reverse_iterator rbegin() const {
+        return const_reverse_iterator(this->c.end());
+    }
+    const_reverse_iterator rend() const {
+        return const_reverse_iterator(this->c.begin());
+    }
+
+  Usage:
+
+    MutantStack<int> ms;
+    // ... push elements ...
+    for (MutantStack<int>::reverse_iterator rit = ms.rbegin();
+         rit != ms.rend(); ++rit)
+        std::cout << *rit << " ";    // prints in reverse order
+
+
+--------------------------------------------------------------------------
+3.7 — Converting between normal and reverse iterators
+--------------------------------------------------------------------------
+
+    std::vector<int> v = {10, 20, 30, 40, 50};
+
+    // Normal iterator from reverse:
+    auto rit = v.rbegin();
+    auto normal_it = rit.base();     // = v.end() (one PAST where rit points)
+
+    // Reverse iterator from normal:
+    auto it = v.begin() + 2;         // points to 30
+    std::reverse_iterator<...> rev(it);
+    std::cout << *rev;                // What does this print?
+    // Answer: *(it - 1) = v[1] = 20 !
+
+  The relationship:
+
+    reverse_iterator(it).base() == it   (always)
+    *reverse_iterator(it) == *(it - 1)  (always)
+
+
+--------------------------------------------------------------------------
+3.8 — Why std::stack doesn't expose them
+--------------------------------------------------------------------------
+
+std::stack is an ADAPTER with a minimal interface: push, pop, top.
+Iterators (normal or reverse) are NOT part of its contract.
+That's exactly why MutantStack exists -- to expose them.
+
+
+--------------------------------------------------------------------------
+SUMMARY: Reverse iterators in one table
+--------------------------------------------------------------------------
+
+  Concept                          Explanation
+  -------------------------------  --------------------------------------------
+  rbegin()                         reverse_iterator(end())
+                                   -> points to the LAST element
+  rend()                           reverse_iterator(begin())
+                                   -> points BEFORE the first element
+  ++rit                            Moves BACKWARD in the container
+                                   -> internally calls --current
+  *rit                             Returns *(current - 1)
+                                   -> one-step offset to the left
+  rit.base()                       Gets the underlying normal iterator
+                                   -> always one position to the right of *rit
+  Golden rule                      &*rit == &*(rit.base() - 1)
+
+
+================================================================================
+END OF DOCUMENT
+================================================================================

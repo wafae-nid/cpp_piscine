@@ -1,0 +1,219 @@
+================================================================================
+  STL CONTAINERS — Detailed explanation (cpp_module_08)
+================================================================================
+
+This file covers the 4 containers used in cpp_module_08:
+  - std::vector
+  - std::deque
+  - std::list
+  - std::stack (adapter)
+
+
+==========================================================================
+1. std::vector (used in ex01 — Span)
+==========================================================================
+
+What is it?
+  A dynamic contiguous array (resizable).
+
+How it works:
+  Elements are stored right next to each other in memory (like a C array,
+  but resizable). When you add an element and there's no room left, vector
+  allocates a new block 2x larger, copies all elements over, then frees the
+  old block.
+
+  Example:
+    std::vector<int> v;
+    v.push_back(10);   // v = [10]
+    v.push_back(20);   // v = [10, 20]
+    std::cout << v[0]; // → 10  (direct index access)
+
+Characteristics:
+  Index access:         O(1) — instant (contiguous memory)
+  Insertion at end:     O(1) amortized
+  Insertion in middle:  O(n) — must shift all elements
+  Insertion at front:   O(n) — must shift all elements
+  Memory:               Contiguous (cache-friendly)
+
+When to use it:  90% of the time. Default container.
+
+Key methods:
+  push_back(), pop_back(), insert(), erase(), clear()
+  size(), empty(), resize(), reserve(), capacity()
+  operator[], at(), front(), back()
+  begin(), end(), rbegin(), rend()
+
+
+==========================================================================
+2. std::deque (used by default in ex02 — MutantStack)
+==========================================================================
+
+What is it?
+  Double-ended queue. A non-contiguous array organized in fixed-size blocks.
+
+How it works:
+  Memory is split into fixed-size blocks (typically 512 bytes). A central
+  array (the "map") points to each block. This allows fast insertion/removal
+  at BOTH the beginning AND end without moving everything.
+
+  Diagram:
+    Map (array of pointers):
+    ┌─────┬─────┬─────┬─────┬─────┐
+    │  *  │  *  │  *  │  *  │  *  │
+    └──┬──┴──┬──┴──┬──┴──┬──┴──┬──┘
+       │     │     │     │     │
+       ▼     ▼     ▼     ▼     ▼
+    ┌────┐┌────┐┌────┐┌────┐┌────┐
+    │    ││    ││    ││    ││    │  ← fixed-size blocks
+    └────┘└────┘└────┘└────┘└────┘
+       ↑                     ↑
+     begin                  end
+
+Characteristics:
+  Index access:           O(1) — via map + offset
+  Insert at front/back:   O(1) — its main advantage
+  Insert in middle:       O(n) — should be avoided
+  Memory:                 Non-contiguous blocks
+
+Key differences from vector:
+  - deque can insert/remove at the BEGINNING in O(1), vector does it in O(n).
+  - deque has NO guarantee of full memory contiguity (only per-block).
+  - vector is slightly faster for pure indexed access.
+
+Why does std::stack use deque by default?
+  Because a stack needs push_back and pop_back (at the end) — both deque
+  and vector do this in O(1). But deque handles memory reclamation better
+  when the stack shrinks.
+
+Key methods:
+  push_back(), push_front(), pop_back(), pop_front()
+  insert(), erase(), clear()
+  size(), empty(), resize()
+  operator[], at(), front(), back()
+  begin(), end(), rbegin(), rend()
+
+
+==========================================================================
+3. std::list (used in ex02 — testing MutantStack)
+==========================================================================
+
+What is it?
+  A doubly-linked list.
+
+How it works:
+  Each element (node) contains the data + a pointer to the previous and next
+  element. No contiguous memory at all.
+
+  Diagram:
+    ┌─────┐    ┌─────┐    ┌─────┐
+    │ 10  │◄──►│ 20  │◄──►│ 30  │
+    │ *─┘ │    │ *─┘ │    │ *─┘ │
+    └─────┘    └─────┘    └─────┘
+
+Characteristics:
+  Index access:         O(n) — must traverse nodes
+  Insert anywhere:      O(1) — once you have the iterator
+  Remove anywhere:      O(1) — once you have the iterator
+  Memory:               Fragmented, each node allocated separately
+
+Key differences from vector and deque:
+  - list can insert/remove ANYWHERE in O(1) (with an iterator).
+  - vector/deque must shift elements → O(n).
+  - list does NOT support direct index access (list[5] is illegal).
+  - list has memory overhead: each element = 3 pointers (data + prev + next).
+
+When to use it:
+  When you're doing many insertions/removals in the middle of the sequence.
+
+Key methods:
+  push_back(), push_front(), pop_back(), pop_front()
+  insert(), erase(), clear()
+  size(), empty(), resize()
+  front(), back()
+  begin(), end(), rbegin(), rend()
+  splice(), merge(), sort(), unique(), reverse()
+
+
+==========================================================================
+4. std::stack (adapter, not a container — used in ex02)
+==========================================================================
+
+What is it?
+  An ADAPTER (not a real container). It wraps an underlying container
+  (deque by default, but can be vector or list) and only exposes the
+  LIFO interface (Last In, First Out).
+
+Interface:
+  push(x)     Add to the top
+  pop()       Remove the top
+  top()       Read the top without removing
+  empty()     Check if empty
+  size()      Number of elements
+
+Example:
+    std::stack<int> s;        // underlying: deque
+    s.push(1);
+    s.push(2);
+    std::cout << s.top();     // → 2
+    s.pop();
+    std::cout << s.top();     // → 1
+
+Why does MutantStack exist?
+  Because std::stack doesn't expose iterators (begin() / end()). MutantStack
+  inherits from std::stack and makes the underlying container's iterator
+  accessible, so you can iterate through the stack with a loop like with
+  a vector.
+
+
+==========================================================================
+COMPLETE COMPARISON TABLE
+==========================================================================
+
++----------------+------------+------------+------------+------------------+
+|   Criterion    |  vector    |   deque    |   list     | stack (adapter)  |
++----------------+------------+------------+------------+------------------+
+| Memory         | Contiguous | Blocks     | Linked     | Depends on       |
+|                |            |            |            | underlying       |
++----------------+------------+------------+------------+------------------+
+| Index access   | v[i] O(1)  | d[i] O(1)  | ❌ No      | ❌ No            |
++----------------+------------+------------+------------+------------------+
+| Iterators      | Random-    | Random-    | Bidirec-   | ❌ Not exposed   |
+|                | access     | access     | tional     |                  |
++----------------+------------+------------+------------+------------------+
+| Push front     | ❌ O(n)    | ✅ O(1)    | ✅ O(1)    | ❌ No interface  |
++----------------+------------+------------+------------+------------------+
+| Push back      | ✅ O(1)*   | ✅ O(1)    | ✅ O(1)    | ✅ via push()    |
++----------------+------------+------------+------------+------------------+
+| Insert middle  | ❌ O(n)    | ❌ O(n)    | ✅ O(1)**  | ❌ No interface  |
++----------------+------------+------------+------------+------------------+
+| Cache friendly | Excellent  | Good       | Bad        | Depends on       |
+|                |            |            |            | underlying       |
++----------------+------------+------------+------------+------------------+
+| Memory         | Low        | Medium     | High       | Depends on       |
+| overhead       |            |            |            | underlying       |
++----------------+------------+------------+------------+------------------+
+
+* amortized O(1) — occasionally expensive when reallocation is needed
+** O(1) if you already have an iterator to the position
+
+
+==========================================================================
+WHICH CONTAINER IN WHICH EXERCISE?
+==========================================================================
+
+  ex00 — easyfind
+    Tests with:     vector<int> & deque<int>
+    Why:            Show the template works with different containers
+                    (both random-access)
+
+  ex01 — Span
+    Internal:       vector<int>
+    Why:            Best choice for storing N integers with random access
+                    and fast append at end
+
+  ex02 — MutantStack
+    Default:        stack<deque>
+    Test:           stack<list>
+    Why:            Prove MutantStack is templated on the underlying container
+
+==========================================================================
