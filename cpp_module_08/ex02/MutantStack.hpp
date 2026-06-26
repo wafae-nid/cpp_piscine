@@ -2,7 +2,8 @@
 #define MUTANTSTACK_HPP
 
 #include <stack>
-#include <deque>
+#include <deque>  
+#include <list>
 #include <iostream>
 
 template <typename T>
