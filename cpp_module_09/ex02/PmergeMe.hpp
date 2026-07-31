@@ -32,14 +32,10 @@ class PmergeMe
 
       std::vector<int> fordJohnsonVector(std::vector<int> v);
       std::deque<int> fordJohnsonDeque(std::deque<int> d);
-      //std::deque<pair> make_pairs_deq(std::deque<int> d);
-      //std::vector<pair> make_pairs_vec(std::vector<int> d);
-      //void build_chain_deq(std::vector<pair> const &pairs);
-      //std::vector<int> build_chain_vec(std::vector<int> vec);
       template<typename Container>
       void Jacobsthal_numbers(Container &c,size_t size, size_t block_size);
       template<typename Container, typename InfoContainer>
-      void build_chains(const Container& v,
+        void build_chains(const Container& v,
                             Container& main,
                             Container& pend,
                             InfoContainer& pend_cont,
