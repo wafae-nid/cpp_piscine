@@ -16,6 +16,8 @@ class BitcoinExchange
         std::map<std::string,float> map_db;
     public:
         BitcoinExchange();
+        BitcoinExchange(const BitcoinExchange& other);
+        BitcoinExchange& operator=(const BitcoinExchange& other);
         // BitcoinExchange(const BitcoinExchange& copy);
         // BitcoinExchange& operator=(const BitcoinExchange& copy);
         
@@ -24,13 +26,12 @@ class BitcoinExchange
         void data_search(std::ifstream& input);
         void processLine(std::string line);
         bool is_valid_date(std::string date);
-        bool is_valid_year(std::string year);
+        int is_valid_year(std::string year);
         bool is_all_digit(std::string year);
-        bool is_valid_month(std::string month);
-        bool is_valid_day(std::string day);
-        std::string trim(const std::string& s);
+        int is_valid_month(std::string month);
+        bool is_valid_day(std::string day, int month, int year);
         float parse_value(const std::string& val_str, bool& valid);
-        void display_result(std::string date, float val);
+        void display_result(const std::string& date, float val);
 };
 
 #endif

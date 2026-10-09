@@ -1,28 +1,57 @@
+
 #include "BitcoinExchange.hpp"
 
-std::map<std::string,float> data_to_map(void)
+std::map<std::string, float> data_to_map(void)
 {
     std::string line;
     size_t comma;
     std::map<std::string, float> map_db;
 
     std::ifstream file("data.csv");
-     if(!file)
+    if (!file)
     {
-        std::cerr << "failed to open the file data.csv"  << "\n";
-        return(map_db);
+        std::cerr << "Error: failed to open data.csv" << std::endl;
+        return map_db;
     }
-    getline(file, line);
-    while(std::getline(file,line))
+
+    std::getline(file, line);
+
+    while (std::getline(file, line))
     {
+        if (!line.empty() && line[line.size() - 1] == '\r')
+            line.erase(line.size() - 1);
+
         comma = line.find(',');
-        std::string date = line.substr(0,comma);
-        std::string val_str = line.substr(comma+1);
+        if (comma == std::string::npos)
+        {
+            std::cerr << "Error: invalid line in data.csv: "
+                      << line << std::endl;
+            return std::map<std::string, float>();
+        }
+
+        std::string date = line.substr(0, comma);
+        std::string val_str = line.substr(comma + 1);
+
         char *end;
-        float val = strtof(val_str.c_str(),&end);
+        float val = std::strtof(val_str.c_str(), &end);
+
+        if (end == val_str.c_str() || *end != '\0')
+        {
+            std::cerr << "Error: invalid exchange rate in data.csv: "
+                      << val_str << std::endl;
+            return std::map<std::string, float>();
+        }
+
+        if (val < 0)
+        {
+            std::cerr << "Error: negative exchange rate in data.csv: "
+                      << val_str << std::endl;
+            return std::map<std::string, float>();
+        }
+
         map_db.insert(std::make_pair(date, val));
     }
-    return(map_db);
+    return map_db;
 }
 
 BitcoinExchange::BitcoinExchange()
@@ -30,24 +59,34 @@ BitcoinExchange::BitcoinExchange()
     map_db = data_to_map();
 }
 
-std::string BitcoinExchange::trim(const std::string& s)
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& other)
+    : map_db(other.map_db)
 {
-    size_t start = s.find_first_not_of(" \t\r\n");
-    size_t end   = s.find_last_not_of(" \t\r\n");
-    if (start == std::string::npos)
-        return "";
-    return s.substr(start, end - start + 1);
 }
 
-bool BitcoinExchange::is_all_digit(std::string str) 
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
 {
-    for(size_t i = 0; i < str.size(); i++)
-    {
-        if(!isdigit(str[i]))
-            return(false);
-    }
-    return(true);
+    if (this != &other)
+        map_db = other.map_db;
+    return *this;
 }
+
+BitcoinExchange::~BitcoinExchange()
+{
+}
+
+bool BitcoinExchange::is_all_digit(std::string str)
+{
+    if (str.empty())
+        return false;
+    for (size_t i = 0; i < str.size(); i++)
+    {
+        if (!isdigit(static_cast<unsigned char>(str[i])))
+            return false;
+    }
+    return true;
+}
+
 float BitcoinExchange::parse_value(const std::string& val_str, bool& valid)
 {
     if (val_str.empty())
@@ -57,8 +96,8 @@ float BitcoinExchange::parse_value(const std::string& val_str, bool& valid)
     }
     char *end;
     float val = strtof(val_str.c_str(), &end);
-    
-    if (*end != '\0')
+
+    if (end == val_str.c_str() || *end != '\0' || val != val)
     {
         std::cout << "Error: bad input => " << val_str << std::endl;
         valid = false;
@@ -79,46 +118,54 @@ float BitcoinExchange::parse_value(const std::string& val_str, bool& valid)
     valid = true;
     return val;
 }
-bool BitcoinExchange::is_valid_day(std::string day)
+bool BitcoinExchange::is_valid_day(std::string day, int month, int year)
 {
-    if(!is_all_digit(day))
-        return(false);
-    else
+    if (!is_all_digit(day))
+        return false;
+
+    int int_day = std::atoi(day.c_str());
+    int max_day;
+
+    if (month == 2)
     {
-        int int_day = std::atoi(day.c_str());
-        if(int_day < 0 || int_day > 31)
-            return(false);
+        if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0))
+            max_day = 29;
         else
-            return(true);
+            max_day = 28;
     }
-}
-bool BitcoinExchange::is_valid_month(std::string month)
-{
-    if(!is_all_digit(month))
-        return(false);
+    else if (month == 4 || month == 6 || month == 9 || month == 11)
+        max_day = 30;
     else
-    {
-        int int_month = std::atoi(month.c_str());
-        if(int_month < 0 || int_month > 12)
-            return(false);
-        else
-            return(true);
-    }
+        max_day = 31;
+
+    if (int_day < 1 || int_day > max_day)
+        return false;
+
+    return true;
 }
 
-bool BitcoinExchange::is_valid_year(std::string year)
+int BitcoinExchange::is_valid_month(std::string month)
 {
-    if(!is_all_digit(year))
-        return(false);
-    else
-    {
-        int int_year = std::atoi(year.c_str());
-        if(int_year <2009 || int_year > 2026)
-            return(false);
-        else
-            return(true);
-    }
+    if (!is_all_digit(month))
+        return -1;
+
+    int int_month = std::atoi(month.c_str());
+    if (int_month < 1 || int_month > 12)
+        return -1;
+    return int_month;
 }
+
+int BitcoinExchange::is_valid_year(std::string year)
+{
+    if (!is_all_digit(year))
+        return -1;
+
+    int int_year = std::atoi(year.c_str());
+    if (int_year < 1)
+        return -1;
+    return int_year;
+}
+
 bool BitcoinExchange::is_valid_date(std::string date)
 {
     size_t pos_1 = date.find('-');
@@ -127,77 +174,106 @@ bool BitcoinExchange::is_valid_date(std::string date)
 
     size_t pos_2 = date.find('-', pos_1 + 1);
     if (pos_2 == std::string::npos)
-         return false;
+        return false;
 
     std::string year_str = date.substr(0, pos_1);
     std::string month_str = date.substr(pos_1 + 1, pos_2 - pos_1 - 1);
     std::string day_str = date.substr(pos_2 + 1);
-    
-    if(!is_valid_year(year_str))
-        return(false);
-    
-    if(!is_valid_month(month_str))
-       return(false); 
-    if(!is_valid_day(day_str))
-        return(false);
 
-    return(true);
-}
-void BitcoinExchange::display_result(std::string date, float val)
-{
-    std::map<std::string,float>::iterator it;
-    it =  map_db.lower_bound(date);
-    float result = it->second * val;
-    std::cout << date<< " => " << val << " = " << result << std::endl;
+    // Enforce YYYY-MM-DD so string comparison in the map stays correct
+    // and atoi can't overflow on huge digit strings.
+    if (year_str.length() != 4 || month_str.length() != 2 || day_str.length() != 2)
+        return false;
 
+    int year = is_valid_year(year_str);
+    if (year == -1)
+        return false;
+    int month = is_valid_month(month_str);
+    if (month == -1)
+        return false;
+    if (!is_valid_day(day_str, month, year))
+        return false;
+    return true;
 }
-void BitcoinExchange::processLine(std::string line)
+
+void BitcoinExchange::display_result(const std::string& date, float val)
 {
-    size_t pipe ;
-    pipe = line.find('|');
-    if(pipe == std::string::npos)
+    std::map<std::string, float>::iterator it = map_db.upper_bound(date);
+    if (it == map_db.begin())
     {
-        std::cout << "Error: bad input => "<<line << std::endl;
+        std::cout << "Error: no earlier date in database." << std::endl;
         return;
     }
-    std::string date = line.substr(0,pipe);
-    std::string trimmed_date = trim(date);
+    --it;
+    std::cout << date << " => " << val << " = " << it->second * val << std::endl;
+}
 
-    if(trimmed_date.empty() || !is_valid_date(trimmed_date))
+void BitcoinExchange::processLine(std::string line)
+{
+    size_t pipe = line.find('|');
+    if (pipe == std::string::npos)
     {
-        std::cout<< "Error: bad input => "<< date<< std::endl;
+        std::cout << "Error: bad input => " << line << std::endl;
+        return;
     }
-    std::string val_str = trim(line.substr(pipe + 1));
+
+    std::string date = line.substr(0, pipe);
+    size_t space = date.find(' ');
+    if (space == std::string::npos || date.substr(space).length() != 1)
+    {
+        std::cout << "Error: bad input => " << line << std::endl;
+        return;
+    }
+
+    std::string after_pipe = line.substr(pipe + 1);
+    size_t pos = after_pipe.find_first_not_of(' ');
+    if (pos == std::string::npos || after_pipe.substr(0, pos).length() != 1)
+    {
+        std::cout << "Error: bad input => " << line << std::endl;
+        return;
+    }
+
+    std::string trimmed_date = date.substr(0, space);
+    if (!is_valid_date(trimmed_date))
+    {
+        std::cout << "Error: bad input => " << line << std::endl;
+        return;
+    }
+
+    std::string val_str = after_pipe.substr(pos);
     bool valid;
     float val = parse_value(val_str, valid);
     if (!valid)
         return;
-    display_result(date, val);
+    display_result(trimmed_date, val);
 }
+
 void BitcoinExchange::data_search(std::ifstream& input)
 {
     std::string line;
 
-    getline(input, line);
-    while(std::getline(input,line))
+    std::getline(input, line);
+    while (std::getline(input, line))
     {
+        if (!line.empty() && line[line.size() - 1] == '\r')
+            line.erase(line.size() - 1);
+
         processLine(line);
     }
-
 }
+
 void BitcoinExchange::processInput(const std::string& file)
 {
-
-    std::ifstream input(file.c_str());
-    if(!input)
+    if (map_db.empty())
     {
-        std::cout << "Error: could not open file.\n";
+        std::cerr << "Error: database has error" << std::endl;
+        return;
+    }
+    std::ifstream input(file.c_str());
+    if (!input)
+    {
+        std::cout << "Error: could not open file." << std::endl;
         return;
     }
     data_search(input);
-
-}
-BitcoinExchange::~BitcoinExchange()
-{
-
 }
