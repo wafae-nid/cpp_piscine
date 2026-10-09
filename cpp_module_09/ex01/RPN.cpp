@@ -1,8 +1,18 @@
-#include "RPN.HPP"
+#include "RPN.hpp"
 
 RPN::RPN()
 {
 
+}
+RPN::RPN(const RPN& other) : rpn_stack(other.rpn_stack)
+{
+}
+
+RPN& RPN::operator=(const RPN& other)
+{
+    if (this != &other)
+        rpn_stack = other.rpn_stack;
+    return *this;
 }
 RPN::~RPN()
 {
@@ -14,7 +24,7 @@ bool RPN::is_operator(char c)
 }
 bool RPN::is_valid_char(char c)
 {
-    return(isdigit(c) || std::isspace(static_cast<unsigned char>(c)) ||
+    return(isdigit(static_cast<unsigned char>(c)) || std::isspace(static_cast<unsigned char>(c)) ||
                  is_operator(c));
     
 }
@@ -27,22 +37,15 @@ bool RPN::is_valid_string(std::string input)
     }
     return(1);
 }
-std::string RPN::trim(const std::string& s)
-{
-    size_t start = s.find_first_not_of(" \v\f\t\r\n");
-    size_t end   = s.find_last_not_of(" \v\f\t\r\n");
-    if (start == std::string::npos)
-        return "";
-    return s.substr(start, end - start + 1);
-}
+
 bool RPN::calculate(char c)
 {
-    int nbr_2 = rpn_stack.top();
+    long nbr_2 = rpn_stack.top();
     rpn_stack.pop();
 
-    int nbr_1 = rpn_stack.top();
+    long nbr_1 = rpn_stack.top();
     rpn_stack.pop();
-    int result;
+    long result = 0 ;
 
     if(c == '+')
         result = nbr_1 + nbr_2;
@@ -59,7 +62,12 @@ bool RPN::calculate(char c)
         }
          result = (nbr_1 / nbr_2);
     }
-    rpn_stack.push(result);
+    if(result > INT_MAX || result < INT_MIN)
+    {
+        std::cerr << "ERROR \n";
+            return(false);
+    }
+    rpn_stack.push(static_cast<int>(result));
     return(true);
 }
 bool RPN::RPN_extract(std::string tmp)
@@ -69,7 +77,7 @@ bool RPN::RPN_extract(std::string tmp)
         std::cerr << "ERROR \n";
         return(false);
     }
-    if(isdigit(tmp[0]))
+    if(isdigit(static_cast<unsigned char>(tmp[0])))
     {
         int nbr = tmp[0] -'0';
         rpn_stack.push(nbr);
