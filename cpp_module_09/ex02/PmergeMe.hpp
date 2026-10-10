@@ -11,7 +11,6 @@
 
 struct PendInfo
 {
-    int pend;
     bool has_pair;
     int pair_pos;
 };

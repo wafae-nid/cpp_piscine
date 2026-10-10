@@ -27,49 +27,47 @@ void PmergeMe::print(const Container &c)
     std::cout << std::endl;
 }
 
-template <typename Container>
-void PmergeMe::sort_pairs(Container& c, size_t block_size)
+
+
+template<typename Container, typename InfoContainer>
+size_t PmergeMe::member_position(
+        const Container& main,
+        const Container& pend,
+        const InfoContainer& pend_cont,
+        size_t pend_idx,
+        size_t block_size)
 {
-    size_t pair_size = block_size * 2;
+    int pend_max =
+        pend[pend_idx * block_size + (block_size - 1)];
 
-    if (pair_size > c.size())
-        return;
+    size_t upper_block = main.size() / block_size;
 
-    for (size_t i = 0; i + pair_size <= c.size(); i += pair_size)
+    if (pend_idx < pend_cont.size() && pend_cont[pend_idx].has_pair)
+        upper_block = pend_cont[pend_idx].pair_pos + 1;
+
+    if (upper_block > main.size() / block_size)
+        upper_block = main.size() / block_size;
+
+    size_t left = 0;
+    size_t right = upper_block;
+
+    while (left < right)
     {
-        size_t left_max  = i + block_size - 1;
-        size_t right_max = i + pair_size - 1;
+        size_t mid = left + (right - left) / 2;
 
-        if (c[left_max] > c[right_max])
-        {
-            for (size_t j = 0; j < block_size; j++)
-                std::swap(c[i + j], c[i + block_size + j]);
-        }
+        int main_max =
+            main[mid * block_size + (block_size - 1)];
+
+        if (main_max < pend_max)
+            left = mid + 1;
+        else
+            right = mid;
     }
 
-    sort_pairs(c, block_size * 2);
-
-    size_t complete_size =
-        (c.size() / block_size) * block_size;
-
-    Container elements(c.begin(),
-                       c.begin() + complete_size);
-
-    Container main_chain;
-    Container pend;
-
-    typename InfoContainerFor<Container>::type pend_info;
-
-    build_chains(elements,main_chain,
-                 pend,pend_info,block_size);
-
-    binary_insertion(main_chain,pend_info,
-                     pend,block_size);
-
-    for (size_t i = 0; i < main_chain.size(); i++)
-        c[i] = main_chain[i];
-
+    return left * block_size;
 }
+
+
 template<typename Container>
 void PmergeMe::build_insertion_order(const Container& jacob,
                                      Container& order)
@@ -117,45 +115,6 @@ void PmergeMe::Jacobsthal_numbers(Container& c,
 }
 
 template<typename Container, typename InfoContainer>
-size_t PmergeMe::member_position(
-        const Container& main,
-        const Container& pend,
-        const InfoContainer& pend_cont,
-        size_t pend_idx,
-        size_t block_size)
-{
-    int pend_max =
-        pend[pend_idx * block_size + (block_size - 1)];
-
-    size_t upper_block = main.size() / block_size;
-
-    if (pend_idx < pend_cont.size() && pend_cont[pend_idx].has_pair)
-        upper_block = pend_cont[pend_idx].pair_pos + 1;
-
-    if (upper_block > main.size() / block_size)
-        upper_block = main.size() / block_size;
-
-    size_t left = 0;
-    size_t right = upper_block;
-
-    while (left < right)
-    {
-        size_t mid = left + (right - left) / 2;
-
-        int main_max =
-            main[mid * block_size + (block_size - 1)];
-
-        if (main_max < pend_max)
-            left = mid + 1;
-        else
-            right = mid;
-    }
-
-    return left * block_size;
-}
-
-
-template<typename Container, typename InfoContainer>
 void PmergeMe::binary_insertion(Container& main,
                                 InfoContainer& pend_cont,
                                 Container& pend,
@@ -197,9 +156,9 @@ void PmergeMe::build_chains(const Container& v,
                             InfoContainer& pend_cont,
                             size_t block_size)
 {
-    main.clear();
-    pend.clear();
-    pend_cont.clear();
+    // main.clear();
+    // pend.clear();
+    // pend_cont.clear();
 
     if (v.empty())
         return;
@@ -224,7 +183,6 @@ void PmergeMe::build_chains(const Container& v,
             pend.push_back(v[i + j]);
 
         PendInfo p;
-        p.pend = i;
         p.has_pair = true;
         p.pair_pos = main.size() / block_size;
 
@@ -240,12 +198,55 @@ void PmergeMe::build_chains(const Container& v,
             pend.push_back(v[i + j]);
 
         PendInfo p;
-        p.pend = i;
         p.has_pair = false;
         p.pair_pos = 0;
 
         pend_cont.push_back(p);
     }
+
+}
+
+template <typename Container>
+void PmergeMe::sort_pairs(Container& c, size_t block_size)
+{
+    size_t pair_size = block_size * 2;
+
+    if (pair_size > c.size())
+        return;
+
+    for (size_t i = 0; i + pair_size <= c.size(); i += pair_size)
+    {
+        size_t left_max  = i + block_size - 1;
+        size_t right_max = i + pair_size - 1;
+
+        if (c[left_max] > c[right_max])
+        {
+            for (size_t j = 0; j < block_size; j++)
+                std::swap(c[i + j], c[i + block_size + j]);
+        }
+    }
+
+    sort_pairs(c, block_size * 2);
+
+    size_t complete_size =
+        (c.size() / block_size) * block_size;
+
+    Container elements(c.begin(),
+                       c.begin() + complete_size);
+
+    Container main_chain;
+    Container pend;
+
+    typename InfoContainerFor<Container>::type pend_info;
+
+    build_chains(elements,main_chain,
+                 pend,pend_info,block_size);
+
+    binary_insertion(main_chain,pend_info,
+                     pend,block_size);
+
+    for (size_t i = 0; i < main_chain.size(); i++)
+        c[i] = main_chain[i];
 
 }
 
