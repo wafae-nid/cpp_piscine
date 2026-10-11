@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <ctime>
-
+#include <typeinfo>
 struct PendInfo
 {
     bool has_pair;
@@ -21,6 +21,9 @@ class PmergeMe
     public:
        PmergeMe();
        ~PmergeMe();
+        PmergeMe(const PmergeMe& other);
+        PmergeMe& operator=(const PmergeMe& other);
+
       bool parse_input(std::string str);
       void run(char **argv, int argc);
 
@@ -54,8 +57,8 @@ class PmergeMe
         std::vector<int> vec;
         std::deque<int> deq; 
 
-        std::deque<int> main_chain_deq;
-        std::deque<int> pend_deq;
+        // std::deque<int> main_chain_deq;
+        // std::deque<int> pend_deq;
 
 };
 

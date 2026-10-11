@@ -19,6 +19,21 @@ struct InfoContainerFor<std::deque<int> >
 PmergeMe::PmergeMe() {}
 PmergeMe::~PmergeMe() {}
 
+PmergeMe::PmergeMe(const PmergeMe& other)
+    : vec(other.vec), deq(other.deq)
+{
+}
+
+PmergeMe& PmergeMe::operator=(const PmergeMe& other)
+{
+    if (this != &other)
+    {
+        vec = other.vec;
+        deq = other.deq;
+    }
+    return *this;
+}
+
 template<typename Container>
 void PmergeMe::print(const Container &c)
 {
@@ -37,23 +52,23 @@ size_t PmergeMe::member_position(
         size_t pend_idx,
         size_t block_size)
 {
-    int pend_max =
-        pend[pend_idx * block_size + (block_size - 1)];
-
+    
     size_t upper_block = main.size() / block_size;
-
+    
     if (pend_idx < pend_cont.size() && pend_cont[pend_idx].has_pair)
         upper_block = pend_cont[pend_idx].pair_pos + 1;
 
-    if (upper_block > main.size() / block_size)
-        upper_block = main.size() / block_size;
+// if (upper_block > main.size() / block_size)
+//     upper_block = main.size() / block_size;
 
     size_t left = 0;
     size_t right = upper_block;
 
+    int pend_max = pend[pend_idx * block_size + (block_size - 1)];
+
     while (left < right)
     {
-        size_t mid = left + (right - left) / 2;
+        size_t mid = (left + right ) / 2;
 
         int main_max =
             main[mid * block_size + (block_size - 1)];
@@ -156,9 +171,6 @@ void PmergeMe::build_chains(const Container& v,
                             InfoContainer& pend_cont,
                             size_t block_size)
 {
-    // main.clear();
-    // pend.clear();
-    // pend_cont.clear();
 
     if (v.empty())
         return;
@@ -168,12 +180,8 @@ void PmergeMe::build_chains(const Container& v,
 
     if (v.size() >= pair_size)
     {
-        for (size_t j = 0; j < block_size; j++)
+        for (size_t j = 0; j < pair_size; j++)
             main.push_back(v[j]);
-
-        for (size_t j = 0; j < block_size; j++)
-            main.push_back(v[block_size + j]);
-
         i = pair_size;
     }
 
@@ -318,11 +326,12 @@ void PmergeMe::run(char **argv, int argc)
     std::cout << "After: ";
     print(sorted_vec);
 
-    std::cout << "Time vector: "
-              << (double)(end1 - start1) / CLOCKS_PER_SEC
+    std::cout << "Time to process a range of " << argc - 1<<" elements with std::vector "
+              << ((double)(end1 - start1) / CLOCKS_PER_SEC)* 1000000.0
               << " us\n";
 
-    std::cout << "Time deque : "
-              << (double)(end2 - start2) / CLOCKS_PER_SEC
+    std::cout << "Time to process a range of " << argc - 1<< " elements with std::deque  "
+              << ((double)(end2 - start2) / CLOCKS_PER_SEC) * 1000000.0
               << " us\n";
+
 }
